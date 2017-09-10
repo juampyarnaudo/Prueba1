@@ -26,4 +26,25 @@
         android:layout_alignParentEnd="true"
         android:layout_marginRight="72dp"
         android:layout_marginEnd="72dp" />
+
+    <ToggleButton
+        android:id="@+id/toggleButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="ToggleButton"
+        android:layout_alignParentBottom="true"
+        android:layout_alignLeft="@+id/textView"
+        android:layout_alignStart="@+id/textView"
+        android:layout_marginBottom="124dp" />
+
+    <CheckBox
+        android:id="@+id/checkBox"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="CheckBox"
+        android:layout_above="@+id/toggleButton"
+        android:layout_alignRight="@+id/toggleButton"
+        android:layout_alignEnd="@+id/toggleButton"
+        android:layout_alignLeft="@+id/toggleButton"
+        android:layout_alignStart="@+id/toggleButton" />
 </RelativeLayout>
