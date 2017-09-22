@@ -1,5 +1,6 @@
 package com.example.juanpablo.prueba1;
 
+import android.content.Intent;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -10,6 +11,7 @@ import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.example.juanpablo.prueba1.activity.StockActivity;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
@@ -77,6 +79,8 @@ public class MainActivity extends AppCompatActivity {
                             Toast.makeText(getBaseContext(), "Login incorrecto", Toast.LENGTH_SHORT).show();
                         }   else {
                             Toast.makeText(getBaseContext(), "Login correcto", Toast.LENGTH_SHORT).show();
+                            Intent intent = new Intent(getBaseContext(), StockActivity.class);
+                            startActivity(intent);
                         }
 
                     }

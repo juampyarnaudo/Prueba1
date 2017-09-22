@@ -1,3 +1,4 @@
 <resources>
     <string name="app_name">Prueba1</string>
+    <string name="title_activity_stock">Stock</string>
 </resources>
