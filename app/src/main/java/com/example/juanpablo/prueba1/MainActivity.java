@@ -11,6 +11,7 @@ import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.example.juanpablo.prueba1.activity.AccountActivity;
 import com.example.juanpablo.prueba1.activity.StockActivity;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
@@ -54,19 +55,8 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void createUser() {
-        mAuth.createUserWithEmailAndPassword(etUser.getText().toString(),etPassword.getText().toString())
-                .addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
-                    @Override
-                    public void onComplete(@NonNull Task<AuthResult> task) {
-                        Log.d(TAG, "createUserWithEmail:onComplete:" + task.isSuccessful());
-
-                        if (!task.isSuccessful()) {
-                            Toast.makeText(getBaseContext(), "Error", Toast.LENGTH_SHORT).show();
-                        } else{
-                            Toast.makeText(getBaseContext(),"Correcto", Toast.LENGTH_LONG).show();
-                        }
-                    }
-                });
+        Intent intent = new Intent(this, AccountActivity.class);
+        startActivity(intent);
     }
     private void loginUser(){
         mAuth.signInWithEmailAndPassword(etUser.getText().toString(),etPassword.getText().toString())
