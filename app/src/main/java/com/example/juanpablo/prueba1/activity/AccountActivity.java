@@ -75,7 +75,16 @@ public class AccountActivity extends AppCompatActivity {
         btnCreate.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                createUser();
+                if (etUser.getText().length()>6 && etUser.getText().toString().contains("@")
+                        && etPassword.getText().length()>5){
+                    if(isInputRight(etName.getText().toString()) && isInputRight(etLastName.getText().toString())) {
+                        createUser();
+                    } else {
+                        Toast.makeText(getBaseContext(),"Nombre y/o Apellidos incompletos",Toast.LENGTH_LONG).show();
+                    }
+                }else   {
+                    Toast.makeText(getBaseContext(),"Usuario o Contraseña incorrecto",Toast.LENGTH_LONG).show();
+                }
             }
         });
 
@@ -101,7 +110,6 @@ public class AccountActivity extends AppCompatActivity {
                 final InputStream imageStream = getContentResolver().openInputStream(imageUri);
                 final Bitmap selectedImage = BitmapFactory.decodeStream(imageStream);
                 ivPhoto.setImageBitmap(selectedImage);
-                uploadImage();
             } catch (FileNotFoundException e) {
                 e.printStackTrace();
                 Toast.makeText(this, "Algo malo paso", Toast.LENGTH_LONG).show();
@@ -121,7 +129,7 @@ public class AccountActivity extends AppCompatActivity {
                         Log.d(TAG, "createUserWithEmail:onComplete:" + task.isSuccessful());
 
                         if (!task.isSuccessful()) {
-                            Toast.makeText(getBaseContext(), "Error", Toast.LENGTH_SHORT).show();
+                            Toast.makeText(getBaseContext(), "Error: " + task.getException().getMessage(), Toast.LENGTH_SHORT).show();
                         } else {
                             //Si es correcto, ingresa a la base de datos el UserID, usuario, pass, nombre, apellido, direccion, dni, telefono, imagen.
                             Toast.makeText(getBaseContext(), "Correcto", Toast.LENGTH_LONG).show();
@@ -133,9 +141,18 @@ public class AccountActivity extends AppCompatActivity {
                             user.setName(etName.getText().toString());
                             user.setLastName(etLastName.getText().toString());
                             user.setAddress(etAddress.getText().toString());
-                            user.setDni(Long.parseLong(etDni.getText().toString()));
-                            user.setPhone(Long.parseLong(etPhone.getText().toString()));
-                            user.setImage("");
+                            try{
+                                user.setDni(Long.parseLong(etDni.getText().toString()));
+                            } catch (Exception e) {
+                                Log.e(TAG, e.getMessage());
+                            }
+                            try{
+                                user.setPhone(Long.parseLong(etPhone.getText().toString()));
+                            } catch (Exception e) {
+                                Log.e(TAG, e.getMessage());
+                            }
+                            uploadImage(userId);
+                            user.setImage(userId + "/profile.jpg");
 
                             // en la base de datos de firebase, muestra despues de User, el registro guardado.
                             FirebaseDatabase database = FirebaseDatabase.getInstance();
@@ -148,9 +165,9 @@ public class AccountActivity extends AppCompatActivity {
                 });
     }
 
-    private void uploadImage(){
+    private void uploadImage(String uid){
         StorageReference storageRef = storage.getReference();
-        StorageReference mountainsRef = storageRef.child("mountains.jpg");
+        StorageReference mountainsRef = storageRef.child(uid + "/profile.jpg");
         ivPhoto.setDrawingCacheEnabled(true);
         ivPhoto.buildDrawingCache();
         Bitmap bitmap = ivPhoto.getDrawingCache();
@@ -175,6 +192,13 @@ public class AccountActivity extends AppCompatActivity {
 
     private void closeActivity() {
         this.finish();
+    }
+
+    private boolean isInputRight(String input){
+        if(input != null && !"".equals(input)){
+            return true;
+        }
+        return false;
     }
 }
 
