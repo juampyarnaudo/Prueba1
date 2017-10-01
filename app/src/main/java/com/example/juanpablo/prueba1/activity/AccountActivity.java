@@ -1,29 +1,49 @@
 package com.example.juanpablo.prueba1.activity;
+
 //Se importan librerias
-import android.support.v7.app.AppCompatActivity;
+import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.net.Uri;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
+import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.Toast;
 
 import com.example.juanpablo.prueba1.R;
 import com.example.juanpablo.prueba1.entity.User;
 import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.StorageReference;
+import com.google.firebase.storage.UploadTask;
+
+import java.io.ByteArrayOutputStream;
+import java.io.FileNotFoundException;
+import java.io.InputStream;
 
 public class AccountActivity extends AppCompatActivity {
 // se declaran como privada las variables
     private EditText etUser, etPassword, etName, etLastName, etDni, etPhone, etAddress;
     private Button btnCreate, btnCancel, btnBrowse;
+    private ImageView ivPhoto;
 
     private FirebaseAuth mAuth;
+    private FirebaseStorage storage;
     private String TAG = "AccountActivity";
+
+    private static int RESULT_LOAD_IMG = 1;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -40,8 +60,10 @@ public class AccountActivity extends AppCompatActivity {
         etDni= (EditText) findViewById(R.id.etDni);
         etPhone= (EditText) findViewById(R.id.etPhone);
         etAddress = (EditText) findViewById(R.id.etAddress);
+        ivPhoto = (ImageView) findViewById(R.id.ivPhoto);
 
         mAuth = FirebaseAuth.getInstance();
+        storage = FirebaseStorage.getInstance();
 
         btnCancel.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -53,24 +75,56 @@ public class AccountActivity extends AppCompatActivity {
         btnCreate.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
                 createUser();
+            }
+        });
+
+        btnBrowse.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent galleryIntent = new Intent(Intent.ACTION_PICK,
+                        android.provider.MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
+                startActivityForResult(galleryIntent, RESULT_LOAD_IMG);
+
             }
         });
     }
 // la funcion createUser controla que los campos esten bien llenados y crea el usuario, en su defecto tirra error.
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+
+        if (resultCode == RESULT_OK) {
+            try {
+                final Uri imageUri = data.getData();
+                final InputStream imageStream = getContentResolver().openInputStream(imageUri);
+                final Bitmap selectedImage = BitmapFactory.decodeStream(imageStream);
+                ivPhoto.setImageBitmap(selectedImage);
+                uploadImage();
+            } catch (FileNotFoundException e) {
+                e.printStackTrace();
+                Toast.makeText(this, "Algo malo paso", Toast.LENGTH_LONG).show();
+            }
+
+        }else {
+            Toast.makeText(this, "No tienes seleccionada ninguna foto",Toast.LENGTH_LONG).show();
+        }
+    }
+
+
     private void createUser(){
         mAuth.createUserWithEmailAndPassword(etUser.getText().toString(),etPassword.getText().toString())
                 .addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
                     @Override
-                    public void onComplete( Task<AuthResult> task) {
+                    public void onComplete(Task<AuthResult> task) {
                         Log.d(TAG, "createUserWithEmail:onComplete:" + task.isSuccessful());
 
                         if (!task.isSuccessful()) {
                             Toast.makeText(getBaseContext(), "Error", Toast.LENGTH_SHORT).show();
-                        } else{
+                        } else {
                             //Si es correcto, ingresa a la base de datos el UserID, usuario, pass, nombre, apellido, direccion, dni, telefono, imagen.
-                            Toast.makeText(getBaseContext(),"Correcto", Toast.LENGTH_LONG).show();
+                            Toast.makeText(getBaseContext(), "Correcto", Toast.LENGTH_LONG).show();
                             String userId = task.getResult().getUser().getUid();
                             User user = User.getInstance();
                             user.setUserId(userId);
@@ -92,6 +146,31 @@ public class AccountActivity extends AppCompatActivity {
                         }
                     }
                 });
+    }
+
+    private void uploadImage(){
+        StorageReference storageRef = storage.getReference();
+        StorageReference mountainsRef = storageRef.child("mountains.jpg");
+        ivPhoto.setDrawingCacheEnabled(true);
+        ivPhoto.buildDrawingCache();
+        Bitmap bitmap = ivPhoto.getDrawingCache();
+        ByteArrayOutputStream baos = new ByteArrayOutputStream();
+        bitmap.compress(Bitmap.CompressFormat.JPEG, 100, baos);
+        byte[] data = baos.toByteArray();
+
+        UploadTask uploadTask = mountainsRef.putBytes(data);
+        uploadTask.addOnFailureListener(new OnFailureListener() {
+            @Override
+            public void onFailure(@NonNull Exception exception) {
+                // Handle unsuccessful uploads
+            }
+        }).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
+            @Override
+            public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
+                // taskSnapshot.getMetadata() contains file metadata such as size, content-type, and download URL.
+                Uri downloadUrl = taskSnapshot.getDownloadUrl();
+            }
+        });
     }
 
     private void closeActivity() {
