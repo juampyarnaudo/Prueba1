@@ -1,54 +1,59 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:orientation="vertical"
-    android:gravity="center"
     android:layout_marginTop="90dp"
+    android:gravity="center"
+    android:orientation="vertical"
+    app:layout_collapseParallaxMultiplier="1.0"
     tools:context="com.example.juanpablo.prueba1.MainActivity">
 
+
+    <ImageView
+        android:id="@+id/imageView2"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_weight="1"
+        android:ems="10"
+        app:srcCompat="@android:drawable/btn_star_big_on" />
 
     <EditText
         android:id="@+id/etUser"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_weight="1"
+        android:ems="14"
         android:gravity="center"
-        android:ems="10"
-        android:inputType="textPersonName"
-        android:hint="User" />
+        android:hint="Ingrese su Usuario"
+        android:inputType="textPersonName" />
 
     <EditText
         android:id="@+id/etPassword"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_weight="1"
+        android:ems="14"
         android:gravity="center"
-        android:ems="10"
-        android:hint="Password"
+        android:hint="Ingrese su Contraseña"
         android:inputType="textPassword" />
 
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
+    <Button
+        android:id="@+id/btnLogin"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
         android:layout_weight="1"
-        android:orientation="horizontal">
+        android:ems="10"
+        android:text="Ingresar" />
 
-        <Button
-            android:id="@+id/btnCreate"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:text="Crear cuenta" />
+    <Button
+        android:id="@+id/btnCreate"
 
-        <Button
-            android:id="@+id/btnLogin"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:text="Ingresar" />
-    </LinearLayout>
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_weight="1"
+        android:ems="10"
+        android:text="Crear cuenta" />
 
 </LinearLayout>

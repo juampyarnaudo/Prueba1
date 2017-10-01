@@ -1,5 +1,5 @@
 package com.example.juanpablo.prueba1;
-
+//Importan las librerias
 import android.content.Intent;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
@@ -21,9 +21,12 @@ import com.google.firebase.auth.FirebaseUser;
 
 
 public class MainActivity extends AppCompatActivity {
+//Este es el HOME
 
+    //Se declaran las variables EditText y botones
     private EditText etUser, etPassword;
     private Button btnCreate, btnLogin;
+    //Se linkea con Firebase Autenticación.
     private FirebaseAuth mAuth;
     private FirebaseAuth.AuthStateListener mAuthListener;
     private String TAG = "MainActivity";
@@ -53,21 +56,25 @@ public class MainActivity extends AppCompatActivity {
             });
 
     }
-
+    //Esta es la funcion Crear Usuario, inicializa la vista AccountActivity para poder crearlo al usuario.
     private void createUser() {
         Intent intent = new Intent(this, AccountActivity.class);
         startActivity(intent);
     }
+    //Login de usuario.
     private void loginUser(){
         mAuth.signInWithEmailAndPassword(etUser.getText().toString(),etPassword.getText().toString())
                 .addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
                     @Override
                     public void onComplete(@NonNull Task<AuthResult> task) {
                         Log.d(TAG, "signInWithEmail:onComplete:" + task.isSuccessful());
+                        //Si el logeo es incorrecto, muestra un cuadro diciendo "Login incorrecto"
                         if (!task.isSuccessful()) {
                             Log.w(TAG, "signInWithEmail:failed", task.getException());
                             Toast.makeText(getBaseContext(), "Login incorrecto", Toast.LENGTH_SHORT).show();
-                        }   else {
+                        }
+                        //Si el logeo es Correcto, muestra un cuadro diciendo "Login Correcto" e inicializa la siguiente vista ( StockActivity )
+                        else {
                             Toast.makeText(getBaseContext(), "Login correcto", Toast.LENGTH_SHORT).show();
                             Intent intent = new Intent(getBaseContext(), StockActivity.class);
                             startActivity(intent);

@@ -1,5 +1,5 @@
 package com.example.juanpablo.prueba1.activity;
-
+//Se importan librerias
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
@@ -18,7 +18,7 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 
 public class AccountActivity extends AppCompatActivity {
-
+// se declaran como privada las variables
     private EditText etUser, etPassword, etName, etLastName, etDni, etPhone, etAddress;
     private Button btnCreate, btnCancel, btnBrowse;
 
@@ -29,7 +29,7 @@ public class AccountActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_account);
-
+// se declaran las variables y castean.
         btnCreate= (Button) findViewById(R.id.btnCreate);
         btnCancel= (Button) findViewById(R.id.btnCancel);
         btnBrowse= (Button) findViewById(R.id.btnBrowse);
@@ -49,7 +49,7 @@ public class AccountActivity extends AppCompatActivity {
                 closeActivity();
             }
         });
-
+// el boton Crear llama la funcion createUser.
         btnCreate.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -58,7 +58,7 @@ public class AccountActivity extends AppCompatActivity {
             }
         });
     }
-
+// la funcion createUser controla que los campos esten bien llenados y crea el usuario, en su defecto tirra error.
     private void createUser(){
         mAuth.createUserWithEmailAndPassword(etUser.getText().toString(),etPassword.getText().toString())
                 .addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
@@ -69,6 +69,7 @@ public class AccountActivity extends AppCompatActivity {
                         if (!task.isSuccessful()) {
                             Toast.makeText(getBaseContext(), "Error", Toast.LENGTH_SHORT).show();
                         } else{
+                            //Si es correcto, ingresa a la base de datos el UserID, usuario, pass, nombre, apellido, direccion, dni, telefono, imagen.
                             Toast.makeText(getBaseContext(),"Correcto", Toast.LENGTH_LONG).show();
                             String userId = task.getResult().getUser().getUid();
                             User user = User.getInstance();
@@ -82,7 +83,7 @@ public class AccountActivity extends AppCompatActivity {
                             user.setPhone(Long.parseLong(etPhone.getText().toString()));
                             user.setImage("");
 
-
+                            // en la base de datos de firebase, muestra despues de User, el registro guardado.
                             FirebaseDatabase database = FirebaseDatabase.getInstance();
                             DatabaseReference myRef = database.getReference("users").child(userId);
                             myRef.setValue(user);

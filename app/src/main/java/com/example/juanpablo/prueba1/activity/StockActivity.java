@@ -1,5 +1,5 @@
 package com.example.juanpablo.prueba1.activity;
-
+//importan las librerias
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
@@ -13,9 +13,9 @@ import com.example.juanpablo.prueba1.adapter.StockListAdapter;
 
 import java.util.ArrayList;
 import java.util.List;
-
+//que es extends AppCompactActivity???
 public class StockActivity extends AppCompatActivity {
-
+// declaran las variables
     private FloatingActionButton fab;
     private ListView lvStock;
     private StockListAdapter stockListAdapter;
@@ -29,7 +29,7 @@ public class StockActivity extends AppCompatActivity {
         lvStock = (ListView) findViewById(R.id.lvStock);
 
         List<String> lista = new ArrayList<>();
-        lista.add("fernet");
+        lista.add("fernet");//aca tenemos que asignarle un edittext para cargar la información? o la cargamos por la bd directamente?
         lista.add("vodka");
         lista.add("gaseosas");
         lista.add("jugos");
