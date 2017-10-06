@@ -34,6 +34,22 @@
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="com.example.juanpablo.prueba1.MainActivity" />
         </activity>
+        <activity android:name=".activity.ProfileActivity"
+            android:label="Perfil"
+            android:parentActivityName=".activity.StockActivity"
+            android:theme="@style/AppTheme">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="com.example.juanpablo.prueba1.activity.StockActivity" />
+        </activity>
+        <activity android:name=".activity.HistoryActivity"
+            android:label="Mis Pedidos"
+            android:parentActivityName=".activity.StockActivity"
+            android:theme="@style/AppTheme">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="com.example.juanpablo.prueba1.activity.StockActivity" />
+        </activity>
     </application>
 
 </manifest>
