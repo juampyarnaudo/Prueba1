@@ -55,7 +55,9 @@ public class MainActivity extends AppCompatActivity {
     }
     //Esta es la funcion Crear Usuario, inicializa la vista AccountActivity para poder crearlo al usuario.
     private void createUser() {
-        Intent intent = new Intent(this, AccountActivity.class);
+//        Intent intent = new Intent(this, AccountActivity.class);
+//        startActivity(intent);
+        Intent intent = new Intent(getBaseContext(), StockActivity.class);
         startActivity(intent);
     }
     //Login de usuario.
