@@ -176,6 +176,7 @@ public class AccountActivity extends AppCompatActivity {
         byte[] data = baos.toByteArray();
 
         UploadTask uploadTask = mountainsRef.putBytes(data);
+
         uploadTask.addOnFailureListener(new OnFailureListener() {
             @Override
             public void onFailure(@NonNull Exception exception) {

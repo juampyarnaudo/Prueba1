@@ -10,12 +10,17 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 
-import com.example.juanpablo.prueba1.activity.AccountActivity;
 import com.example.juanpablo.prueba1.activity.StockActivity;
+import com.example.juanpablo.prueba1.entity.User;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 
 
 public class MainActivity extends AppCompatActivity {
@@ -75,12 +80,30 @@ public class MainActivity extends AppCompatActivity {
                         //Si el logeo es Correcto, muestra un cuadro diciendo "Login Correcto" e inicializa la siguiente vista ( StockActivity )
                         else {
                             Toast.makeText(getBaseContext(), "Login correcto", Toast.LENGTH_SHORT).show();
-                            Intent intent = new Intent(getBaseContext(), StockActivity.class);
-                            startActivity(intent);
+                            showStockActivity(task.getResult().getUser().getUid());
                         }
 
                     }
                 });
 
+    }
+    private void showStockActivity(String userId){
+        FirebaseDatabase database = FirebaseDatabase.getInstance();
+        DatabaseReference myRef = database.getReference("users").child(userId);
+        myRef.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                User user = dataSnapshot.getValue(User.class);
+                User.setUser(user);
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+
+            }
+        });
+
+        Intent intent = new Intent(getBaseContext(), StockActivity.class);
+        startActivity(intent);
     }
 }

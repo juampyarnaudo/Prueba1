@@ -14,7 +14,7 @@ public class User {
     private long phone;
     private String image;
 
-    private User() {}
+    public User() {}
 
     public static User getInstance() {
         if(instance == null) {
@@ -93,5 +93,9 @@ public class User {
 
     public void setImage(String image) {
         this.image = image;
+    }
+
+    public static void setUser(User user) {
+        instance = user;
     }
 }
