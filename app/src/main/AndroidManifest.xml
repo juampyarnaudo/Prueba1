@@ -20,11 +20,7 @@
         <activity
             android:name=".activity.StockActivity"
             android:label="@string/title_activity_stock"
-            android:parentActivityName=".MainActivity"
             android:theme="@style/AppTheme">
-            <meta-data
-                android:name="android.support.PARENT_ACTIVITY"
-                android:value="com.example.juanpablo.prueba1.MainActivity" />
         </activity>
         <activity
             android:name=".activity.AccountActivity"

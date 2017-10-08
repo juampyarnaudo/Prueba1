@@ -25,9 +25,8 @@
         android:layout_marginLeft="16dp"
         android:layout_marginRight="16dp"
         android:ems="10"
-        android:text="contraseña"
+        android:hint="********"
         android:textAlignment="center"
-        android:hint="Contraseña"
         android:inputType="textPassword" />
 
     <LinearLayout

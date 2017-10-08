@@ -152,7 +152,7 @@ public class AccountActivity extends AppCompatActivity {
                                 Log.e(TAG, e.getMessage());
                             }
                             uploadImage(userId);
-                            user.setImage(userId + "/profile.jpg");
+                            user.setImage("users/" + userId + "/profile.jpg");
 
                             // en la base de datos de firebase, muestra despues de User, el registro guardado.
                             FirebaseDatabase database = FirebaseDatabase.getInstance();
@@ -167,7 +167,7 @@ public class AccountActivity extends AppCompatActivity {
 
     private void uploadImage(String uid){
         StorageReference storageRef = storage.getReference();
-        StorageReference mountainsRef = storageRef.child(uid + "/profile.jpg");
+        StorageReference mountainsRef = storageRef.child("users/" + uid + "/profile.jpg");
         ivPhoto.setDrawingCacheEnabled(true);
         ivPhoto.buildDrawingCache();
         Bitmap bitmap = ivPhoto.getDrawingCache();
@@ -192,6 +192,8 @@ public class AccountActivity extends AppCompatActivity {
     }
 
     private void closeActivity() {
+        Intent intent = new Intent(this, StockActivity.class);
+        startActivity(intent);
         this.finish();
     }
 

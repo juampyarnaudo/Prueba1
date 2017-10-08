@@ -1,5 +1,6 @@
 package com.example.juanpablo.prueba1;
 //Importan las librerias
+
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
@@ -10,6 +11,7 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 
+import com.example.juanpablo.prueba1.activity.AccountActivity;
 import com.example.juanpablo.prueba1.activity.StockActivity;
 import com.example.juanpablo.prueba1.entity.User;
 import com.google.android.gms.tasks.OnCompleteListener;
@@ -60,10 +62,10 @@ public class MainActivity extends AppCompatActivity {
     }
     //Esta es la funcion Crear Usuario, inicializa la vista AccountActivity para poder crearlo al usuario.
     private void createUser() {
-//        Intent intent = new Intent(this, AccountActivity.class);
-//        startActivity(intent);
-        Intent intent = new Intent(getBaseContext(), StockActivity.class);
+        Intent intent = new Intent(this, AccountActivity.class);
         startActivity(intent);
+//        Intent intent = new Intent(getBaseContext(), StockActivity.class);
+//        startActivity(intent);
     }
     //Login de usuario.
     private void loginUser(){
@@ -80,14 +82,14 @@ public class MainActivity extends AppCompatActivity {
                         //Si el logeo es Correcto, muestra un cuadro diciendo "Login Correcto" e inicializa la siguiente vista ( StockActivity )
                         else {
                             Toast.makeText(getBaseContext(), "Login correcto", Toast.LENGTH_SHORT).show();
-                            showStockActivity(task.getResult().getUser().getUid());
+                            launchStockActivity(task.getResult().getUser().getUid());
                         }
 
                     }
                 });
 
     }
-    private void showStockActivity(String userId){
+    private void launchStockActivity(String userId){
         FirebaseDatabase database = FirebaseDatabase.getInstance();
         DatabaseReference myRef = database.getReference("users").child(userId);
         myRef.addListenerForSingleValueEvent(new ValueEventListener() {
@@ -105,5 +107,7 @@ public class MainActivity extends AppCompatActivity {
 
         Intent intent = new Intent(getBaseContext(), StockActivity.class);
         startActivity(intent);
+        etUser.setText("");
+        etPassword.setText("");
     }
 }

@@ -7,6 +7,7 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -18,13 +19,23 @@ import android.widget.Toast;
 import com.bumptech.glide.Glide;
 import com.example.juanpablo.prueba1.R;
 import com.example.juanpablo.prueba1.entity.User;
+import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.android.gms.tasks.Task;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
+import com.google.firebase.storage.UploadTask;
 
+import java.io.ByteArrayOutputStream;
 import java.io.FileNotFoundException;
 import java.io.InputStream;
+import java.util.HashMap;
+import java.util.Map;
 
 public class ProfileActivity extends AppCompatActivity {
 
@@ -45,8 +56,13 @@ public class ProfileActivity extends AppCompatActivity {
 
     private StorageReference storageRef;
     private FirebaseStorage storage;
+    private DatabaseReference mDatabase;
+    private FirebaseUser fireUser;
 
     private static int RESULT_LOAD_IMG = 1;
+    private static String TAG = "ProfileActivity";
+
+    private boolean isPhotoChanged = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -69,6 +85,7 @@ public class ProfileActivity extends AppCompatActivity {
         user = User.getInstance();
         storage = FirebaseStorage.getInstance();
         storageRef = storage.getReference().child(user.getImage());
+        mDatabase = FirebaseDatabase.getInstance().getReference();
 
         tvUser.setText(user.getUser());
         etName.setText(user.getName());
@@ -129,9 +146,72 @@ public class ProfileActivity extends AppCompatActivity {
         btnBrowse.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                isPhotoChanged = true;
                 Intent galleryIntent = new Intent(Intent.ACTION_PICK,
                         android.provider.MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
                 startActivityForResult(galleryIntent, RESULT_LOAD_IMG);
+            }
+        });
+
+        btnUpdate.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                try {
+                    Map<String, Object> map = new HashMap<>();
+                    map.put("users/" + user.getUserId() + "/name", etName.getText().toString());
+                    map.put("users/" + user.getUserId() + "/lastName", etLastName.getText().toString());
+                    map.put("users/" + user.getUserId() + "/dni", Long.parseLong(etDni.getText().toString()));
+                    map.put("users/" + user.getUserId() + "/phone", Long.parseLong(etPhone.getText().toString()));
+                    map.put("users/" + user.getUserId() + "/address", etAddress.getText().toString());
+                    if (stUpdatePass.isChecked() && !"".equals(etPassword.getText())) {
+                        map.put("users/" + user.getUserId() + "/password", etPassword.getText().toString());
+                        fireUser = FirebaseAuth.getInstance().getCurrentUser();
+                        fireUser.updatePassword(etPassword.getText().toString())
+                                .addOnCompleteListener(new OnCompleteListener<Void>() {
+                                    @Override
+                                    public void onComplete(@NonNull Task<Void> task) {
+                                        if (task.isSuccessful()) {
+                                            Log.d(TAG, "User password updated.");
+                                        } else {
+                                            Toast.makeText(getBaseContext(), "Error: " + task.getException().getMessage(), Toast.LENGTH_LONG).show();
+                                        }
+                                    }
+                                });
+                    }
+                    if (isPhotoChanged) {
+                        uploadImage(user.getUserId());
+                    }
+
+                    mDatabase.updateChildren(map);
+                    Toast.makeText(getBaseContext(), "Actualizacion Exitosa", Toast.LENGTH_LONG).show();
+                } catch (Exception e) {
+                    Toast.makeText(getBaseContext(), "Error: " + e.getMessage(), Toast.LENGTH_LONG).show();
+                }
+            }
+        });
+    }
+
+    private void uploadImage(String uid){
+//        StorageReference mountainsRef = storageRef;
+        ivPhoto.setDrawingCacheEnabled(true);
+        ivPhoto.buildDrawingCache();
+        Bitmap bitmap = ivPhoto.getDrawingCache();
+        ByteArrayOutputStream baos = new ByteArrayOutputStream();
+        bitmap.compress(Bitmap.CompressFormat.JPEG, 100, baos);
+        byte[] data = baos.toByteArray();
+
+        UploadTask uploadTask = storageRef.putBytes(data);
+
+        uploadTask.addOnFailureListener(new OnFailureListener() {
+            @Override
+            public void onFailure(@NonNull Exception exception) {
+                // Handle unsuccessful uploads
+            }
+        }).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
+            @Override
+            public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
+                // taskSnapshot.getMetadata() contains file metadata such as size, content-type, and download URL.
+                Uri downloadUrl = taskSnapshot.getDownloadUrl();
             }
         });
     }
