@@ -2,24 +2,18 @@ package com.example.juanpablo.prueba1.entity;
 
 public class Stock {
 
-    private long id;
     private String name;
     private double price;
     private int count;
     private String image;
 
+    public Stock() {
+    }
+
     public Stock(String name, double price, int count) {
         this.name = name;
         this.price = price;
         this.count = count;
-    }
-
-    public long getId() {
-        return id;
-    }
-
-    public void setId(long id) {
-        this.id = id;
     }
 
     public String getName() {

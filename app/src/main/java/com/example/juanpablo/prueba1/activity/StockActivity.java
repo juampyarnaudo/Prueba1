@@ -1,5 +1,6 @@
 package com.example.juanpablo.prueba1.activity;
 //importan las librerias
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
@@ -17,9 +18,15 @@ import android.widget.Toast;
 import com.example.juanpablo.prueba1.R;
 import com.example.juanpablo.prueba1.adapter.StockListAdapter;
 import com.example.juanpablo.prueba1.entity.Stock;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
 import java.util.List;
+
 //que es extends AppCompactActivity???
 public class StockActivity extends AppCompatActivity {
 // declaran las variables
@@ -36,33 +43,9 @@ public class StockActivity extends AppCompatActivity {
 
         fab = (FloatingActionButton) findViewById(R.id.fab);
         lvStock = (ListView) findViewById(R.id.lvStock);
-        try{
-            svSearch = (SearchView) findViewById(R.id.svSearch);
-        }catch (Exception e){
-            Toast.makeText(this, e.getMessage(), Toast.LENGTH_LONG).show();
-        }
+        svSearch = (SearchView) findViewById(R.id.svSearch);
 
-        List<Stock> lista = new ArrayList<>();
-        Stock stock = new Stock("fernet",160,23);
-        lista.add(stock);
-        stock = new Stock("Smirnoff",120,21);
-        lista.add(stock);
-        stock = new Stock("Absolut",610,10);
-        lista.add(stock);
-        stock = new Stock("Quilmes",35,64);
-        lista.add(stock);
-        stock = new Stock("Isenbeck",29,54);
-        lista.add(stock);
-        stock = new Stock("Wisky",400,5);
-        lista.add(stock);
-        stock = new Stock("Coca Cola 3lt",60,150);
-        lista.add(stock);
-        stockListAdapter = new StockListAdapter(this,lista);
-
-        lvStock.setAdapter(stockListAdapter);
-        lvStock.setTextFilterEnabled(true);
-
-        setupSearchView();
+        setStock(this);
 
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -114,5 +97,32 @@ public class StockActivity extends AppCompatActivity {
             }
         });
         svSearch.setSubmitButtonEnabled(true);
+    }
+
+    private void setStock(final Context context) {
+        final FirebaseDatabase database = FirebaseDatabase.getInstance();
+        DatabaseReference ref = database.getReference("stock");
+        final List<Stock> stocks = new ArrayList<>();
+
+        ref.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                for(DataSnapshot snapshot : dataSnapshot.getChildren()) {
+                    Stock stock = snapshot.getValue(Stock.class);
+                    stocks.add(stock);
+                }
+                stockListAdapter = new StockListAdapter(context, stocks);
+
+                lvStock.setAdapter(stockListAdapter);
+                lvStock.setTextFilterEnabled(true);
+
+                setupSearchView();
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+                Toast.makeText(context, "Mapa error", Toast.LENGTH_LONG).show();
+            }
+        });
     }
 }
