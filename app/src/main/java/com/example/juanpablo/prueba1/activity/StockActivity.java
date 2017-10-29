@@ -12,6 +12,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.WindowManager;
 import android.widget.ListView;
+import android.widget.ProgressBar;
 import android.widget.SearchView;
 import android.widget.Toast;
 
@@ -33,6 +34,7 @@ public class StockActivity extends AppCompatActivity {
     private FloatingActionButton fab;
     private SearchView svSearch;
     private ListView lvStock;
+    private ProgressBar pbLoad;
     private StockListAdapter stockListAdapter;
 
     @Override
@@ -44,6 +46,7 @@ public class StockActivity extends AppCompatActivity {
         fab = (FloatingActionButton) findViewById(R.id.fab);
         lvStock = (ListView) findViewById(R.id.lvStock);
         svSearch = (SearchView) findViewById(R.id.svSearch);
+        pbLoad = (ProgressBar) findViewById(R.id.pbLoad);
 
         setStock(this);
 
@@ -107,6 +110,7 @@ public class StockActivity extends AppCompatActivity {
         ref.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
+                stocks.clear();
                 for(DataSnapshot snapshot : dataSnapshot.getChildren()) {
                     Stock stock = snapshot.getValue(Stock.class);
                     stocks.add(stock);
@@ -115,6 +119,8 @@ public class StockActivity extends AppCompatActivity {
 
                 lvStock.setAdapter(stockListAdapter);
                 lvStock.setTextFilterEnabled(true);
+
+                pbLoad.setVisibility(View.GONE);
 
                 setupSearchView();
             }

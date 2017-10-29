@@ -7,10 +7,12 @@ import android.widget.Toast;
 
 import com.example.juanpablo.prueba1.R;
 import com.example.juanpablo.prueba1.entity.Buy;
+import com.example.juanpablo.prueba1.entity.User;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.Query;
 import com.google.firebase.database.ValueEventListener;
 
 import java.util.HashMap;
@@ -22,22 +24,25 @@ public class HistoryActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_history);
+
+        setBuy(this);
     }
 
-    public static void getBuy(final Context context) {
+    public static void setBuy(final Context context) {
+        User user = User.getInstance();
         final FirebaseDatabase database = FirebaseDatabase.getInstance();
-//        DatabaseReference ref = database.getReference("buys/vLtvmiN1UZgSdnw2J0DUc7skor72201710090702");
-        DatabaseReference ref = database.getReference("buys");
+        Query query = database.getReference("buys").orderByChild("userId").equalTo(user.getUserId());
         final Map<String,Buy> buyMap = new HashMap<>();
 
-        ref.addValueEventListener(new ValueEventListener() {
+        query.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
+                buyMap.clear();
                 for(DataSnapshot snapshot : dataSnapshot.getChildren()) {
                     Buy buy = snapshot.getValue(Buy.class);
                     buyMap.put(snapshot.getKey(), buy);
                 }
-
+                Toast.makeText(context, buyMap.size()+"", Toast.LENGTH_LONG).show();
             }
 
             @Override
