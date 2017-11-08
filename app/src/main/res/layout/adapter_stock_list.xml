@@ -2,10 +2,9 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:orientation="vertical"
-    android:padding="16dp"
+    android:padding="10dp"
     android:layout_width="match_parent"
     android:layout_height="wrap_content">
-
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -17,11 +16,12 @@
             android:id="@+id/ivStock"
             android:layout_width="70dp"
             android:layout_height="70dp"
+            android:layout_marginRight="8dp"
             app:srcCompat="@drawable/common_google_signin_btn_icon_dark" />
 
         <LinearLayout
             android:layout_width="wrap_content"
-            android:layout_height="match_parent"
+            android:layout_height="wrap_content"
             android:gravity="center_vertical"
             android:layout_weight="1"
             android:orientation="vertical">

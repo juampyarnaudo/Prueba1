@@ -6,6 +6,7 @@ public class Stock {
     private double price;
     private int count;
     private String image;
+    private String imageUrl;
 
     public Stock() {
     }
@@ -46,5 +47,13 @@ public class Stock {
 
     public void setImage(String image) {
         this.image = image;
+    }
+
+    public String getImageUrl() {
+        return imageUrl;
+    }
+
+    public void setImageUrl(String imageUrl) {
+        this.imageUrl = imageUrl;
     }
 }
