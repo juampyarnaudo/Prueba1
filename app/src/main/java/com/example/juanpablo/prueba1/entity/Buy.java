@@ -3,10 +3,10 @@ package com.example.juanpablo.prueba1.entity;
 import java.util.List;
 
 public class Buy {
-    private String date;
-    private List<Element> elements;
-    private double total;
-    private String userId;
+    protected String date;
+    protected List<Element> elements;
+    protected double total;
+    protected String userId;
 
     public Buy() {
     }

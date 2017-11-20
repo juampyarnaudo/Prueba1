@@ -11,6 +11,8 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.WindowManager;
+import android.widget.AdapterView;
+import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.ProgressBar;
 import android.widget.SearchView;
@@ -18,6 +20,8 @@ import android.widget.Toast;
 
 import com.example.juanpablo.prueba1.R;
 import com.example.juanpablo.prueba1.adapter.StockListAdapter;
+import com.example.juanpablo.prueba1.dialog.NumberPickerDialog;
+import com.example.juanpablo.prueba1.entity.NewBuy;
 import com.example.juanpablo.prueba1.entity.Stock;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -37,6 +41,8 @@ public class StockActivity extends AppCompatActivity {
     private ProgressBar pbLoad;
     private StockListAdapter stockListAdapter;
 
+    private List<Stock> stocks;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -53,10 +59,21 @@ public class StockActivity extends AppCompatActivity {
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
-                        .setAction("Action", null).show();
+                double total = NewBuy.getInstance().getTotal();
+                Snackbar.make(view, "Total a pagar $" + total, Snackbar.LENGTH_LONG)
+                        .setActionTextColor(getResources().getColor(R.color.snackbar_action))
+                        .setAction("Acción", new View.OnClickListener() {
+                            @Override
+                            public void onClick(View view) {
+                                Intent intent = new Intent(getBaseContext(), OrderActivity.class);
+                                startActivity(intent);
+                            }
+                        })
+                        .show();
             }
         });
+
+        enabledButton();
     }
 
     @Override
@@ -84,6 +101,11 @@ public class StockActivity extends AppCompatActivity {
         return true;
     }
 
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+    }
+
     private void setupSearchView() {
         svSearch.setIconifiedByDefault(false);
         svSearch.setQueryHint("Search Here");
@@ -105,7 +127,7 @@ public class StockActivity extends AppCompatActivity {
     private void setStock(final Context context) {
         final FirebaseDatabase database = FirebaseDatabase.getInstance();
         DatabaseReference ref = database.getReference("stock");
-        final List<Stock> stocks = new ArrayList<>();
+        stocks = new ArrayList<>();
 
         ref.addValueEventListener(new ValueEventListener() {
             @Override
@@ -123,6 +145,7 @@ public class StockActivity extends AppCompatActivity {
                 pbLoad.setVisibility(View.GONE);
 
                 setupSearchView();
+                setListeners();
             }
 
             @Override
@@ -131,4 +154,24 @@ public class StockActivity extends AppCompatActivity {
             }
         });
     }
+
+    private void setListeners() {
+        lvStock.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                NumberPickerDialog dialog = new NumberPickerDialog();
+                dialog.setStockItem(stocks.get(position));
+                dialog.show(getFragmentManager(),"Tag");
+            }
+        });
+    }
+
+    public void enabledButton(){
+        if(NewBuy.getInstance().getTotal() != 0){
+            fab.setVisibility(View.VISIBLE);
+        } else {
+            fab.setVisibility(View.INVISIBLE);
+        }
+    }
+
 }
