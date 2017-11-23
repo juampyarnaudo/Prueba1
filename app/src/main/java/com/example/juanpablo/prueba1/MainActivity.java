@@ -66,8 +66,6 @@ public class MainActivity extends AppCompatActivity {
     private void createUser() {
         Intent intent = new Intent(this, AccountActivity.class);
         startActivity(intent);
-//        Intent intent = new Intent(getBaseContext(), StockActivity.class);
-//        startActivity(intent);
     }
     //Login de usuario.
     private void loginUser(){

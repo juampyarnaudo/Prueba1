@@ -49,7 +49,7 @@ public class StockListAdapter extends ArrayAdapter<Stock> {
         ivStock = (ImageView) convertView.findViewById(R.id.ivStock);
 
         tvName.setText(objectsFiltered.get(position).getName());
-        tvPrice.setText(Double.toString(objectsFiltered.get(position).getPrice()));
+        tvPrice.setText("$" + objectsFiltered.get(position).getPrice());
         tvCount.setText(Integer.toString(objectsFiltered.get(position).getCount()));
         ivStock.setImageResource(R.drawable.perfil);
 

@@ -195,8 +195,6 @@ public class AccountActivity extends AppCompatActivity {
     }
 
     private void closeActivity() {
-        Intent intent = new Intent(this, StockActivity.class);
-        startActivity(intent);
         this.finish();
     }
 

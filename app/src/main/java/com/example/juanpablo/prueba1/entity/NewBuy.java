@@ -30,7 +30,7 @@ public class NewBuy extends Buy {
         return calendar;
     }
 
-    private static void setInstance(NewBuy instance) {
+    public static void setInstance(NewBuy instance) {
         newBuy = instance;
     }
 }

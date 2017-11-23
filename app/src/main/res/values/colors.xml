@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <color name="colorPrimary">#e26527</color>
-    <color name="colorPrimaryDark">#e1030d</color>
-    <color name="colorAccent">#f8db28</color>
+    <color name="colorPrimary">#f3a602</color>
+    <color name="colorPrimaryDark">#df9303</color>
+    <color name="colorAccent">#d64738</color>
 
     <color name="snackbar_action">#ffff7663</color>
 </resources>
