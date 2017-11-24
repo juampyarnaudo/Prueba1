@@ -10,6 +10,7 @@ import android.view.View;
 import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ProgressBar;
 import android.widget.Toast;
 
 import com.example.juanpablo.prueba1.activity.AccountActivity;
@@ -32,6 +33,7 @@ public class MainActivity extends AppCompatActivity {
     //Se declaran las variables EditText y botones
     private EditText etUser, etPassword;
     private Button btnCreate, btnLogin;
+    private ProgressBar pbLoad;
     //Se linkea con Firebase Autenticación.
     private FirebaseAuth mAuth;
     private String TAG = "MainActivity";
@@ -46,6 +48,7 @@ public class MainActivity extends AppCompatActivity {
         etPassword = (EditText) findViewById(R.id.etPassword);
         btnCreate = (Button) findViewById(R.id.btnCreate);
         btnLogin = (Button) findViewById(R.id.btnLogin);
+        pbLoad = (ProgressBar) findViewById(R.id.pbLoad);
         mAuth = FirebaseAuth.getInstance();
 
         btnCreate.setOnClickListener(new View.OnClickListener() {
@@ -69,6 +72,11 @@ public class MainActivity extends AppCompatActivity {
     }
     //Login de usuario.
     private void loginUser(){
+        btnCreate.setEnabled(false);
+        btnLogin.setEnabled(false);
+        etUser.setEnabled(false);
+        etPassword.setEnabled(false);
+        pbLoad.setVisibility(View.VISIBLE);
         mAuth.signInWithEmailAndPassword(etUser.getText().toString(),etPassword.getText().toString())
                 .addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
                     @Override
@@ -78,11 +86,17 @@ public class MainActivity extends AppCompatActivity {
                         if (!task.isSuccessful()) {
                             Log.w(TAG, "signInWithEmail:failed", task.getException());
                             Toast.makeText(getBaseContext(), "Login incorrecto", Toast.LENGTH_SHORT).show();
+                            btnCreate.setEnabled(true);
+                            btnLogin.setEnabled(true);
+                            etUser.setEnabled(true);
+                            etPassword.setEnabled(true);
+                            pbLoad.setVisibility(View.INVISIBLE);
                         }
                         //Si el logeo es Correcto, muestra un cuadro diciendo "Login Correcto" e inicializa la siguiente vista ( StockActivity )
                         else {
                             Toast.makeText(getBaseContext(), "Login correcto", Toast.LENGTH_SHORT).show();
                             launchStockActivity(task.getResult().getUser().getUid());
+                            finish();
                         }
 
                     }

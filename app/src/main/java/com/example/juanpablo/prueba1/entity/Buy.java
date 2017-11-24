@@ -7,6 +7,7 @@ public class Buy {
     protected List<Element> elements;
     protected double total;
     protected String userId;
+    protected String month;
 
     public Buy() {
     }
@@ -48,5 +49,13 @@ public class Buy {
 
     public void setUserId(String userId) {
         this.userId = userId;
+    }
+
+    public String getMonth() {
+        return month;
+    }
+
+    public void setMonth(String month) {
+        this.month = month;
     }
 }

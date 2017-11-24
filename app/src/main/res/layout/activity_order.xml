@@ -89,6 +89,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:id="@+id/etAdress"
+                android:visibility="gone"
                 android:hint="Direccion"/>
 
         </LinearLayout>

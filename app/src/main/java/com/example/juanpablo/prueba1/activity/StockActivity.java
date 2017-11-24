@@ -18,6 +18,7 @@ import android.widget.ProgressBar;
 import android.widget.SearchView;
 import android.widget.Toast;
 
+import com.example.juanpablo.prueba1.MainActivity;
 import com.example.juanpablo.prueba1.R;
 import com.example.juanpablo.prueba1.adapter.StockListAdapter;
 import com.example.juanpablo.prueba1.dialog.NumberPickerDialog;
@@ -34,7 +35,8 @@ import java.util.List;
 
 //que es extends AppCompactActivity???
 public class StockActivity extends AppCompatActivity {
-// declaran las variables
+    public static final int BUY_CAR_CODE = 1;
+    // declaran las variables
     private FloatingActionButton fab;
     private SearchView svSearch;
     private ListView lvStock;
@@ -62,11 +64,11 @@ public class StockActivity extends AppCompatActivity {
                 double total = NewBuy.getInstance().getTotal();
                 Snackbar.make(view, "Total a pagar $" + total, Snackbar.LENGTH_LONG)
                         .setActionTextColor(getResources().getColor(R.color.snackbar_action))
-                        .setAction("Acción", new View.OnClickListener() {
+                        .setAction("Comprar", new View.OnClickListener() {
                             @Override
                             public void onClick(View view) {
                                 Intent intent = new Intent(getBaseContext(), OrderActivity.class);
-                                startActivity(intent);
+                                startActivityForResult(intent, BUY_CAR_CODE);
                             }
                         })
                         .show();
@@ -95,6 +97,8 @@ public class StockActivity extends AppCompatActivity {
                 startActivity(intent2);
                 break;
             case R.id.logout:
+                Intent intent3 = new Intent(this, MainActivity.class);
+                startActivity(intent3);
                 finish();
                 break;
         }
@@ -103,7 +107,11 @@ public class StockActivity extends AppCompatActivity {
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        super.onActivityResult(requestCode, resultCode, data);
+        if(resultCode == RESULT_OK) {
+            if(requestCode == BUY_CAR_CODE) {
+                enabledButton();
+            }
+        }
     }
 
     private void setupSearchView() {
