@@ -17,7 +17,7 @@ public class DateUtil {
     }
 
     public static String buildMonth() {
-        int month = Calendar.getInstance().get(Calendar.DAY_OF_MONTH);
+        int month = Calendar.getInstance().get(Calendar.MONTH);
         String calendar = months[month];
         calendar += Calendar.getInstance().get(Calendar.YEAR);
         return calendar;

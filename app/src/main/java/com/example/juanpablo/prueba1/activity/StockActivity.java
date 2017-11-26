@@ -24,6 +24,7 @@ import com.example.juanpablo.prueba1.adapter.StockListAdapter;
 import com.example.juanpablo.prueba1.dialog.NumberPickerDialog;
 import com.example.juanpablo.prueba1.entity.NewBuy;
 import com.example.juanpablo.prueba1.entity.Stock;
+import com.example.juanpablo.prueba1.util.LocationUtil;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -50,6 +51,9 @@ public class StockActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_stock);
         this.getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_HIDDEN);
+
+        LocationUtil locationUtil = new LocationUtil(this);
+        locationUtil.checkPermission();
 
         fab = (FloatingActionButton) findViewById(R.id.fab);
         lvStock = (ListView) findViewById(R.id.lvStock);

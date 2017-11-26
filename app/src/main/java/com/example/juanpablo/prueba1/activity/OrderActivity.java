@@ -19,6 +19,7 @@ import com.example.juanpablo.prueba1.entity.Buy;
 import com.example.juanpablo.prueba1.entity.Element;
 import com.example.juanpablo.prueba1.entity.NewBuy;
 import com.example.juanpablo.prueba1.entity.User;
+import com.example.juanpablo.prueba1.util.LocationUtil;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 
@@ -103,11 +104,14 @@ public class OrderActivity extends AppCompatActivity {
                         .replace(" ", ""). replace("/","")
                         .replace(":","");
                 myRef = mDatabase.getReference("buys/" + ref);
+                NewBuy.getInstance().setUserId(User.getInstance().getUserId());
                 myRef.setValue((Buy)NewBuy.getInstance());
                 Toast.makeText(getBaseContext(), "Compra registrada exitosamente", Toast.LENGTH_LONG).show();
                 finishAndResult(BUY_CODE);
             }
         });
+        LocationUtil locationUtil = new LocationUtil(this);
+        String location = locationUtil.getLocation();
     }
 
     private void finishAndResult(String action){

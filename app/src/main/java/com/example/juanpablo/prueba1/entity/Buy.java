@@ -12,13 +12,6 @@ public class Buy {
     public Buy() {
     }
 
-    public Buy(String date, List<Element> elements, double total, String userId) {
-        this.date = date;
-        this.elements = elements;
-        this.total = total;
-        this.userId = userId;
-    }
-
     public String getDate() {
         return date;
     }
