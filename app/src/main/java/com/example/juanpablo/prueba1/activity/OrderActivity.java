@@ -25,10 +25,14 @@ import com.example.juanpablo.prueba1.adapter.HistoryInsideListAdapter;
 import com.example.juanpablo.prueba1.entity.Buy;
 import com.example.juanpablo.prueba1.entity.Element;
 import com.example.juanpablo.prueba1.entity.NewBuy;
+import com.example.juanpablo.prueba1.entity.Stock;
 import com.example.juanpablo.prueba1.entity.User;
 import com.example.juanpablo.prueba1.util.LocationUtil;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 
 import java.util.List;
 
@@ -70,8 +74,6 @@ public class OrderActivity extends AppCompatActivity {
         rbLocal = (RadioButton) findViewById(R.id.rbLocal);
         rbLocal = (RadioButton) findViewById(R.id.rbLocal);
         etAdress = (EditText) findViewById(R.id.etAdress);
-
-        mDatabase = FirebaseDatabase.getInstance();
 
         List<Element> elements = NewBuy.getInstance().getElements();
 
@@ -116,12 +118,8 @@ public class OrderActivity extends AppCompatActivity {
         btnAccept.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                String ref = User.getInstance().getUserId() + NewBuy.getInstance().getDate()
-                        .replace(" ", ""). replace("/","")
-                        .replace(":","");
-                NewBuy.getInstance().setUserId(User.getInstance().getUserId());
-                myRef = mDatabase.getReference("buys/" + ref);
 
+                NewBuy.getInstance().setUserId(User.getInstance().getUserId());
 
                 if(radioGroup.getCheckedRadioButtonId() == R.id.rbDelivery){
                     if("".equals(etAdress.getText().toString())){
@@ -129,7 +127,7 @@ public class OrderActivity extends AppCompatActivity {
                     } else {
                         NewBuy.getInstance().setAddress(etAdress.getText().toString());
                         NewBuy.getInstance().setDelivery(true);
-                        myRef.setValue((Buy)NewBuy.getInstance());
+                        recordBuy();
                         launchNotification();
                         finishAndResult(BUY_CODE);
                     }
@@ -138,7 +136,7 @@ public class OrderActivity extends AppCompatActivity {
                     NewBuy.getInstance().setDelivery(false);
                     NewBuy.getInstance().setAddress("");
                     NewBuy.getInstance().setLocation("");
-                    myRef.setValue((Buy)NewBuy.getInstance());
+                    recordBuy();
                     launchNotification();
                     finishAndResult(BUY_CODE);
                 }
@@ -153,8 +151,10 @@ public class OrderActivity extends AppCompatActivity {
         i.putExtra(ACTION_CODE, action);
         setResult(RESULT_OK, i);
 
-        Intent intent = new Intent(this, CongratsActivity.class);
-        startActivity(intent);
+        if(!CLEAR_CODE.equals(action)){
+            Intent intent = new Intent(this, CongratsActivity.class);
+            startActivity(intent);
+        }
         finish();
     }
 
@@ -188,6 +188,35 @@ public class OrderActivity extends AppCompatActivity {
     }
 
     private void recordBuy(){
-        
+        mDatabase = FirebaseDatabase.getInstance();
+        String ref = User.getInstance().getUserId() + NewBuy.getInstance().getDate()
+                .replace(" ", ""). replace("/","")
+                .replace(":","");
+        myRef = mDatabase.getReference("buys/" + ref);
+
+        decreaseSotck();
+
+        myRef.setValue((Buy)NewBuy.getInstance());
+    }
+
+    private void decreaseSotck() {
+        for (final Element element : NewBuy.getInstance().getElements()){
+            DatabaseReference stockRef = FirebaseDatabase.getInstance().getReference("stock/"+element.getStockId());
+            stockRef.addListenerForSingleValueEvent(new ValueEventListener() {
+                @Override
+                public void onDataChange(DataSnapshot dataSnapshot) {
+                    Stock stock = dataSnapshot.getValue(Stock.class);
+                    if(element.getAmount() <= stock.getCount()){
+                        DatabaseReference reference = FirebaseDatabase.getInstance().getReference("stock/" + stock.getName());
+                        int newCOunt = stock.getCount() - element.getAmount();
+                        reference.child("count").setValue(newCOunt);
+                    }
+                }
+                @Override
+                public void onCancelled(DatabaseError databaseError) {
+
+                }
+            });
+        }
     }
 }

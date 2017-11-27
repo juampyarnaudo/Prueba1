@@ -61,7 +61,14 @@
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="com.example.juanpablo.prueba1.activity.StockActivity" />
         </activity>
-        <activity android:name=".activity.CongratsActivity"></activity>
+        <activity android:name=".activity.CongratsActivity" />
+        <activity android:name=".activity.ContactActivity"
+            android:parentActivityName=".activity.StockActivity"
+            android:theme="@style/AppTheme">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="com.example.juanpablo.prueba1.activity.StockActivity" />
+        </activity>
     </application>
 
 </manifest>

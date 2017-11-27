@@ -94,7 +94,6 @@ public class MainActivity extends AppCompatActivity {
                         }
                         //Si el logeo es Correcto, muestra un cuadro diciendo "Login Correcto" e inicializa la siguiente vista ( StockActivity )
                         else {
-                            Toast.makeText(getBaseContext(), "Login correcto", Toast.LENGTH_SHORT).show();
                             launchStockActivity(task.getResult().getUser().getUid());
                             finish();
                         }

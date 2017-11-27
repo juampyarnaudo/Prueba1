@@ -19,7 +19,7 @@ import com.example.juanpablo.prueba1.entity.Stock;
 public class NumberPickerDialog extends DialogFragment {
 
     private Stock stock;
-    private int stockAmount = 1 ;
+    private int stockAmount = 0 ;
 
     @Override
     public Dialog onCreateDialog(Bundle savedInstanceState) {
@@ -28,11 +28,11 @@ public class NumberPickerDialog extends DialogFragment {
         View view = getActivity().getLayoutInflater().inflate(R.layout.dialog_number_picker, null);
         NumberPicker np = view.findViewById(R.id.numberPicker);
         np.setMaxValue(stock.getCount());
-        np.setMinValue(1);
+        np.setMinValue(0);
         TextView tvPrice = view.findViewById(R.id.tvPrice);
         tvPrice.setText("$" + Double.toString(stock.getPrice()));
         final TextView tvTotal = view.findViewById(R.id.tvTotal);
-        tvTotal.setText("Total $" + Double.toString(stock.getPrice()));
+        tvTotal.setText("Total $" + stock.getPrice() * np.getValue());
 
 
         np.setOnValueChangedListener(new NumberPicker.OnValueChangeListener() {
@@ -48,14 +48,16 @@ public class NumberPickerDialog extends DialogFragment {
         builder.setPositiveButton("Aceptar", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
-                NewBuy newBuy = NewBuy.getInstance();
-                Element element = new Element(stockAmount, stock.getPrice(), stock.getName());
-                newBuy.getElements().add(element);
-                double totalActual = newBuy.getTotal();
-                newBuy.setTotal(totalActual + stock.getPrice() * stockAmount);
-                StockActivity activity = (StockActivity) getActivity();
-                activity.enabledButton();
-                Toast.makeText(getContext(), "Se agregaron " + stockAmount + " " + stock.getName(), Toast.LENGTH_SHORT).show();
+                if(stockAmount != 0){
+                    NewBuy newBuy = NewBuy.getInstance();
+                    Element element = new Element(stockAmount, stock.getPrice(), stock.getName());
+                    newBuy.getElements().add(element);
+                    double totalActual = newBuy.getTotal();
+                    newBuy.setTotal(totalActual + stock.getPrice() * stockAmount);
+                    StockActivity activity = (StockActivity) getActivity();
+                    activity.enabledButton();
+                    Toast.makeText(getContext(), "Se agregaron " + stockAmount + " " + stock.getName(), Toast.LENGTH_SHORT).show();
+                }
             }
         });
         builder.setNegativeButton("Cancelar", new DialogInterface.OnClickListener() {

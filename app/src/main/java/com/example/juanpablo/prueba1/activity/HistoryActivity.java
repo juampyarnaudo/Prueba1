@@ -51,7 +51,6 @@ public class HistoryActivity extends AppCompatActivity {
                 }
                 historyListAdapter = new HistoryListAdapter(getBaseContext(), buys);
                 lvHistory.setAdapter(historyListAdapter);
-                Toast.makeText(context, buys.size() + "", Toast.LENGTH_LONG).show();
             }
 
             @Override

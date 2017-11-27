@@ -100,9 +100,13 @@ public class StockActivity extends AppCompatActivity {
                 Intent intent2 = new Intent(this, HistoryActivity.class);
                 startActivity(intent2);
                 break;
-            case R.id.logout:
-                Intent intent3 = new Intent(this, MainActivity.class);
+            case R.id.contact:
+                Intent intent3 = new Intent(this, ContactActivity.class);
                 startActivity(intent3);
+                break;
+            case R.id.logout:
+                Intent intent4 = new Intent(this, MainActivity.class);
+                startActivity(intent4);
                 finish();
                 break;
         }
@@ -172,8 +176,12 @@ public class StockActivity extends AppCompatActivity {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 NumberPickerDialog dialog = new NumberPickerDialog();
-                dialog.setStockItem(stocks.get(position));
-                dialog.show(getFragmentManager(),"Tag");
+                if(stocks.get(position).getCount() != 0) {
+                    dialog.setStockItem(stocks.get(position));
+                    dialog.show(getFragmentManager(),"Tag");
+                } else {
+                    Toast.makeText(getBaseContext(), "Stock insuficiente", Toast.LENGTH_LONG).show();
+                }
             }
         });
     }
