@@ -8,6 +8,11 @@ public class Buy {
     protected double total;
     protected String userId;
     protected String month;
+    protected String address = "";
+    protected String location = "";
+    protected boolean delivery = false;
+    protected boolean closed = false;
+
 
     public Buy() {
     }
@@ -50,5 +55,37 @@ public class Buy {
 
     public void setMonth(String month) {
         this.month = month;
+    }
+
+    public String getAddress() {
+        return address;
+    }
+
+    public void setAddress(String address) {
+        this.address = address;
+    }
+
+    public String getLocation() {
+        return location;
+    }
+
+    public void setLocation(String location) {
+        this.location = location;
+    }
+
+    public boolean isDelivery() {
+        return delivery;
+    }
+
+    public void setDelivery(boolean delivery) {
+        this.delivery = delivery;
+    }
+
+    public boolean isClosed() {
+        return closed;
+    }
+
+    public void setClosed(boolean closed) {
+        this.closed = closed;
     }
 }

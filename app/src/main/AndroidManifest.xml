@@ -4,7 +4,10 @@
 
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
+
     <uses-feature android:name="android.hardware.location.gps" />
+
+    <uses-permission android:name="android.permission.VIBRATE" />
 
     <application
         android:allowBackup="true"
@@ -22,7 +25,7 @@
         <activity
             android:name=".activity.StockActivity"
             android:label="@string/title_activity_stock"
-            android:theme="@style/AppTheme"/>
+            android:theme="@style/AppTheme" />
         <activity
             android:name=".activity.AccountActivity"
             android:label="@string/title_activity_account"
@@ -50,13 +53,15 @@
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="com.example.juanpablo.prueba1.activity.StockActivity" />
         </activity>
-        <activity android:name=".activity.OrderActivity"
+        <activity
+            android:name=".activity.OrderActivity"
             android:parentActivityName=".activity.StockActivity"
             android:theme="@style/AppTheme">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="com.example.juanpablo.prueba1.activity.StockActivity" />
         </activity>
+        <activity android:name=".activity.CongratsActivity"></activity>
     </application>
 
 </manifest>

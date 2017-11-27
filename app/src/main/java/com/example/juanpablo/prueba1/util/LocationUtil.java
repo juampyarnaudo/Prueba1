@@ -12,6 +12,8 @@ import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
 import android.widget.Toast;
 
+import com.example.juanpablo.prueba1.entity.NewBuy;
+
 public class LocationUtil {
 
     private Activity activity;
@@ -43,7 +45,7 @@ public class LocationUtil {
 
         LocationListener locationListener = new LocationListener() {
             public void onLocationChanged(Location location) {
-                Toast.makeText(activity, location.getLatitude() +"," + location.getLongitude(), Toast.LENGTH_LONG).show();
+                NewBuy.getInstance().setLocation(location.getLatitude()+","+location.getLongitude());
             }
 
             public void onStatusChanged(String provider, int status, Bundle extras) {}

@@ -27,7 +27,7 @@ public class NumberPickerDialog extends DialogFragment {
 
         View view = getActivity().getLayoutInflater().inflate(R.layout.dialog_number_picker, null);
         NumberPicker np = view.findViewById(R.id.numberPicker);
-        np.setMaxValue(100);
+        np.setMaxValue(stock.getCount());
         np.setMinValue(1);
         TextView tvPrice = view.findViewById(R.id.tvPrice);
         tvPrice.setText("$" + Double.toString(stock.getPrice()));

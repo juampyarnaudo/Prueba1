@@ -1,6 +1,13 @@
 package com.example.juanpablo.prueba1.activity;
 
+import android.app.Notification;
+import android.app.NotificationManager;
+import android.app.PendingIntent;
+import android.content.Context;
 import android.content.Intent;
+import android.graphics.drawable.BitmapDrawable;
+import android.media.RingtoneManager;
+import android.net.Uri;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
@@ -30,6 +37,8 @@ public class OrderActivity extends AppCompatActivity {
     public static final String ACTION_CODE = "ACTION";
     public static final String CLEAR_CODE = "CLEAR";
     public static final String BUY_CODE = "BUY";
+    public static final int NOTIFICATION_ID = 1;
+
     private ListView lvElements;
     private TextView tvDate;
     private TextView tvTotal;
@@ -43,6 +52,8 @@ public class OrderActivity extends AppCompatActivity {
 
     private FirebaseDatabase mDatabase;
     private DatabaseReference myRef;
+
+    private LocationUtil locationUtil;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -64,6 +75,9 @@ public class OrderActivity extends AppCompatActivity {
 
         List<Element> elements = NewBuy.getInstance().getElements();
 
+        locationUtil = new LocationUtil(this);
+        locationUtil.getLocation();
+
         lvElements.setAdapter(new HistoryInsideListAdapter(this, elements));
         lvElements.setLayoutParams(new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT,110 * elements.size()));
 
@@ -79,6 +93,8 @@ public class OrderActivity extends AppCompatActivity {
                         break;
                     case R.id.rbDelivery:
                         etAdress.setVisibility(View.VISIBLE);
+                        locationUtil.getLocation();
+                        break;
                 }
             }
         });
@@ -103,15 +119,32 @@ public class OrderActivity extends AppCompatActivity {
                 String ref = User.getInstance().getUserId() + NewBuy.getInstance().getDate()
                         .replace(" ", ""). replace("/","")
                         .replace(":","");
-                myRef = mDatabase.getReference("buys/" + ref);
                 NewBuy.getInstance().setUserId(User.getInstance().getUserId());
-                myRef.setValue((Buy)NewBuy.getInstance());
-                Toast.makeText(getBaseContext(), "Compra registrada exitosamente", Toast.LENGTH_LONG).show();
-                finishAndResult(BUY_CODE);
+                myRef = mDatabase.getReference("buys/" + ref);
+
+
+                if(radioGroup.getCheckedRadioButtonId() == R.id.rbDelivery){
+                    if("".equals(etAdress.getText().toString())){
+                        Toast.makeText(getBaseContext(), "Agregar Direccion valida", Toast.LENGTH_LONG).show();
+                    } else {
+                        NewBuy.getInstance().setAddress(etAdress.getText().toString());
+                        NewBuy.getInstance().setDelivery(true);
+                        myRef.setValue((Buy)NewBuy.getInstance());
+                        launchNotification();
+                        finishAndResult(BUY_CODE);
+                    }
+
+                } else if (radioGroup.getCheckedRadioButtonId() == R.id.rbLocal){
+                    NewBuy.getInstance().setDelivery(false);
+                    NewBuy.getInstance().setAddress("");
+                    NewBuy.getInstance().setLocation("");
+                    myRef.setValue((Buy)NewBuy.getInstance());
+                    launchNotification();
+                    finishAndResult(BUY_CODE);
+                }
+
             }
         });
-        LocationUtil locationUtil = new LocationUtil(this);
-        String location = locationUtil.getLocation();
     }
 
     private void finishAndResult(String action){
@@ -119,6 +152,42 @@ public class OrderActivity extends AppCompatActivity {
         Intent i = getIntent();
         i.putExtra(ACTION_CODE, action);
         setResult(RESULT_OK, i);
+
+        Intent intent = new Intent(this, CongratsActivity.class);
+        startActivity(intent);
         finish();
+    }
+
+    private void launchNotification() {
+        Uri defaultSound = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION);
+        long[] pattern = new long[]{1000,500,1000};
+
+        Notification.Builder builder = new Notification.Builder(this);
+        builder.setContentTitle("Compra registrada exitosamente")
+                .setContentText("¡Gracias por confiar en nosotros!")
+                .setSound(defaultSound)
+                .setVibrate(pattern)
+                .setPriority(Notification.PRIORITY_DEFAULT)
+                .setSmallIcon(R.drawable.beer_icon)
+                .setLargeIcon((((BitmapDrawable)getResources()
+                        .getDrawable(R.drawable.logo)).getBitmap()))
+                .setAutoCancel(true)
+                .setContentIntent(PendingIntent.getActivity(this, 0, new Intent(), 0));
+
+        Notification.InboxStyle inboxStyle = new Notification.InboxStyle(builder)
+                .setBigContentTitle("Compra registrada exitosamente")
+                .setSummaryText("Total de la compra $" + NewBuy.getInstance().getTotal());
+
+        for(Element element : NewBuy.getInstance().getElements()){
+            inboxStyle.addLine(element.getStockId() + " -> " + element.getAmount());
+        }
+
+        NotificationManager notifManager = (NotificationManager)getSystemService(Context.NOTIFICATION_SERVICE);
+
+        notifManager.notify(NOTIFICATION_ID, inboxStyle.build());
+    }
+
+    private void recordBuy(){
+        
     }
 }
