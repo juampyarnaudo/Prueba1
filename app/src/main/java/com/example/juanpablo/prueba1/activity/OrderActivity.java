@@ -50,9 +50,8 @@ public class OrderActivity extends AppCompatActivity {
     private Button btnAccept;
     private Button btnCancel;
     private RadioGroup radioGroup;
-    private RadioButton rbLocal;
-    private RadioButton rbDelivery;
     private EditText etAdress;
+    private LinearLayout llLocal, llDelivery;
 
     private FirebaseDatabase mDatabase;
     private DatabaseReference myRef;
@@ -71,9 +70,9 @@ public class OrderActivity extends AppCompatActivity {
         btnAccept = (Button) findViewById(R.id.btnAccept);
         btnCancel = (Button) findViewById(R.id.btnCancel);
         radioGroup = (RadioGroup) findViewById(R.id.radioGroup);
-        rbLocal = (RadioButton) findViewById(R.id.rbLocal);
-        rbLocal = (RadioButton) findViewById(R.id.rbLocal);
         etAdress = (EditText) findViewById(R.id.etAdress);
+        llLocal = (LinearLayout) findViewById(R.id.llLocal);
+        llDelivery = (LinearLayout) findViewById(R.id.llDelivery);
 
         List<Element> elements = NewBuy.getInstance().getElements();
 
@@ -91,10 +90,12 @@ public class OrderActivity extends AppCompatActivity {
             public void onCheckedChanged(RadioGroup group, int checkedId) {
                 switch (checkedId){
                     case R.id.rbLocal:
-                        etAdress.setVisibility(View.GONE);
+                        llLocal.setVisibility(View.VISIBLE);
+                        llDelivery.setVisibility(View.GONE);
                         break;
                     case R.id.rbDelivery:
-                        etAdress.setVisibility(View.VISIBLE);
+                        llLocal.setVisibility(View.GONE);
+                        llDelivery.setVisibility(View.VISIBLE);
                         locationUtil.getLocation();
                         break;
                 }

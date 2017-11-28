@@ -20,6 +20,7 @@ import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -65,6 +66,16 @@ public class MainActivity extends AppCompatActivity {
             });
 
     }
+
+    @Override
+    protected void onStart() {
+        super.onStart();
+        FirebaseUser currentUser = mAuth.getCurrentUser();
+        if(currentUser != null) {
+            launchStockActivity(currentUser.getUid());
+        }
+    }
+
     //Esta es la funcion Crear Usuario, inicializa la vista AccountActivity para poder crearlo al usuario.
     private void createUser() {
         Intent intent = new Intent(this, AccountActivity.class);

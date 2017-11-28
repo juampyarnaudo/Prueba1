@@ -25,6 +25,7 @@ import com.example.juanpablo.prueba1.dialog.NumberPickerDialog;
 import com.example.juanpablo.prueba1.entity.NewBuy;
 import com.example.juanpablo.prueba1.entity.Stock;
 import com.example.juanpablo.prueba1.util.LocationUtil;
+import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -105,6 +106,7 @@ public class StockActivity extends AppCompatActivity {
                 startActivity(intent3);
                 break;
             case R.id.logout:
+                FirebaseAuth.getInstance().signOut();
                 Intent intent4 = new Intent(this, MainActivity.class);
                 startActivity(intent4);
                 finish();
