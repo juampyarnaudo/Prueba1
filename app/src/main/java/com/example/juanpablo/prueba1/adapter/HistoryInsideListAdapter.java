@@ -39,7 +39,7 @@ public class HistoryInsideListAdapter extends ArrayAdapter<Element>{
         tvAmount = convertView.findViewById(R.id.tvAmount);
 
         tvStock.setText(elements.get(position).getStockId());
-        tvPrice.setText(Double.toString(elements.get(position).getPrice()));
+        tvPrice.setText("$" + elements.get(position).getPrice());
         tvAmount.setText(Integer.toString(elements.get(position).getAmount()));
 
         return convertView;

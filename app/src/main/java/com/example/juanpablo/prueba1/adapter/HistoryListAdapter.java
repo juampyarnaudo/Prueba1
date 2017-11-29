@@ -46,12 +46,12 @@ public class HistoryListAdapter extends ArrayAdapter<Buy> {
         lvInsideHistory = convertView.findViewById(R.id.lvInsideHistory);
 
         tvDate.setText(buys.get(position).getDate());
-        tvTotal.setText(Double.toString(buys.get(position).getTotal()));
+        tvTotal.setText("$" + buys.get(position).getTotal());
 
         ListAdapter adapter = new HistoryInsideListAdapter(context, buys.get(position).getElements());
         lvInsideHistory.setAdapter(adapter);
 
-        lvInsideHistory.setLayoutParams(new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT,100 * buys.get(position).getElements().size()));
+        lvInsideHistory.setLayoutParams(new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT,80 * buys.get(position).getElements().size()));
 
         return convertView;
     }

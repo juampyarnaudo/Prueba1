@@ -80,7 +80,7 @@ public class OrderActivity extends AppCompatActivity {
         locationUtil.getLocation();
 
         lvElements.setAdapter(new HistoryInsideListAdapter(this, elements));
-        lvElements.setLayoutParams(new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT,110 * elements.size()));
+        lvElements.setLayoutParams(new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT,90 * elements.size()));
 
         tvDate.setText(NewBuy.getInstance().getDate());
         tvTotal.setText("Total a Pagar $" + NewBuy.getInstance().getTotal());

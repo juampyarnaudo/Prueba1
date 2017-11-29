@@ -1,11 +1,13 @@
 package com.example.juanpablo.prueba1.activity;
 //importan las librerias
+import android.app.SearchManager;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.SearchView;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
@@ -15,7 +17,6 @@ import android.widget.AdapterView;
 import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.ProgressBar;
-import android.widget.SearchView;
 import android.widget.Toast;
 
 import com.example.juanpablo.prueba1.MainActivity;
@@ -40,7 +41,7 @@ public class StockActivity extends AppCompatActivity {
     public static final int BUY_CAR_CODE = 1;
     // declaran las variables
     private FloatingActionButton fab;
-    private SearchView svSearch;
+    private SearchView searchView;
     private ListView lvStock;
     private ProgressBar pbLoad;
     private StockListAdapter stockListAdapter;
@@ -58,7 +59,6 @@ public class StockActivity extends AppCompatActivity {
 
         fab = (FloatingActionButton) findViewById(R.id.fab);
         lvStock = (ListView) findViewById(R.id.lvStock);
-        svSearch = (SearchView) findViewById(R.id.svSearch);
         pbLoad = (ProgressBar) findViewById(R.id.pbLoad);
 
         setStock(this);
@@ -87,7 +87,26 @@ public class StockActivity extends AppCompatActivity {
     public boolean onCreateOptionsMenu(Menu menu) {
         MenuInflater inflater = getMenuInflater();
         inflater.inflate(R.menu.menu, menu);
+
+        MenuItem searchItem = menu.findItem(R.id.search);
+
+        SearchManager searchManager = (SearchManager) this.getSystemService(Context.SEARCH_SERVICE);
+
+        if (searchItem != null) {
+            searchView = (SearchView) searchItem.getActionView();
+        }
+        if (searchView != null) {
+            searchView.setSearchableInfo(searchManager.getSearchableInfo(this.getComponentName()));
+            setupSearchView();
+        }
+
         return true;
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        this.invalidateOptionsMenu();
     }
 
     @Override
@@ -125,21 +144,23 @@ public class StockActivity extends AppCompatActivity {
     }
 
     private void setupSearchView() {
-        svSearch.setIconifiedByDefault(false);
-        svSearch.setQueryHint("Search Here");
-        svSearch.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
-            @Override
-            public boolean onQueryTextSubmit(String query) {
-                return false;
-            }
+        if (searchView != null) {
+            searchView.setQueryHint("Buscar...");
+            searchView.setIconifiedByDefault(true);
+            searchView.setSubmitButtonEnabled(false);
+            searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
+                @Override
+                public boolean onQueryTextSubmit(String query) {
+                    return false;
+                }
 
-            @Override
-            public boolean onQueryTextChange(String newText) {
-                stockListAdapter.getFilter().filter(newText);
-                return true;
-            }
-        });
-        svSearch.setSubmitButtonEnabled(true);
+                @Override
+                public boolean onQueryTextChange(String newText) {
+                    stockListAdapter.getFilter().filter(newText);
+                    return true;
+                }
+            });
+        }
     }
 
     private void setStock(final Context context) {
