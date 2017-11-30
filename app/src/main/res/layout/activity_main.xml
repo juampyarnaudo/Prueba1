@@ -26,20 +26,19 @@
         android:layout_height="wrap_content"
         android:layout_weight="1"
         android:ems="14"
-        android:text="juampyar@gmail.com"
         android:gravity="center"
-        android:hint="Ingrese su Usuario"
-        android:inputType="textPersonName" />
+        android:hint="Correo"
+        android:inputType="textEmailAddress" />
 
     <EditText
         android:id="@+id/etPassword"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_weight="1"
-        android:text="123456"
         android:ems="14"
+        android:fontFamily="sans-serif"
         android:gravity="center"
-        android:hint="Ingrese su Contraseña"
+        android:hint="Contraseña"
         android:inputType="textPassword" />
 
     <Button

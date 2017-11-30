@@ -6,17 +6,28 @@ import android.content.DialogInterface;
 import android.os.Bundle;
 import android.support.v7.app.AlertDialog;
 import android.view.View;
+import android.widget.ImageView;
 import android.widget.NumberPicker;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.bumptech.glide.Glide;
 import com.example.juanpablo.prueba1.R;
 import com.example.juanpablo.prueba1.activity.StockActivity;
 import com.example.juanpablo.prueba1.entity.Element;
 import com.example.juanpablo.prueba1.entity.NewBuy;
 import com.example.juanpablo.prueba1.entity.Stock;
 
+import jp.wasabeef.glide.transformations.RoundedCornersTransformation;
+
+import static com.bumptech.glide.request.RequestOptions.bitmapTransform;
+
 public class NumberPickerDialog extends DialogFragment {
+
+    private TextView tvTotal;
+    private TextView tvPrice;
+    private NumberPicker numberPicker;
+    private ImageView ivPhoto;
 
     private Stock stock;
     private int stockAmount = 0 ;
@@ -26,16 +37,21 @@ public class NumberPickerDialog extends DialogFragment {
         AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
 
         View view = getActivity().getLayoutInflater().inflate(R.layout.dialog_number_picker, null);
-        NumberPicker np = view.findViewById(R.id.numberPicker);
-        np.setMaxValue(stock.getCount());
-        np.setMinValue(0);
-        TextView tvPrice = view.findViewById(R.id.tvPrice);
+
+        tvPrice = view.findViewById(R.id.tvPrice);
+        tvTotal = view.findViewById(R.id.tvTotal);
+        numberPicker = view.findViewById(R.id.numberPicker);
+        ivPhoto = view.findViewById(R.id.ivPhoto);
+
+        numberPicker.setMaxValue(stock.getCount());
+        numberPicker.setMinValue(0);
         tvPrice.setText("$" + Double.toString(stock.getPrice()));
-        final TextView tvTotal = view.findViewById(R.id.tvTotal);
-        tvTotal.setText("Total $" + stock.getPrice() * np.getValue());
+        tvTotal.setText("Total $" + stock.getPrice() * numberPicker.getValue());
+        Glide.with(getActivity())
+                .load(stock.getImageUrl())
+                .into(ivPhoto);
 
-
-        np.setOnValueChangedListener(new NumberPicker.OnValueChangeListener() {
+        numberPicker.setOnValueChangedListener(new NumberPicker.OnValueChangeListener() {
             @Override
             public void onValueChange(NumberPicker picker, int oldVal, int newVal) {
                 stockAmount = newVal;

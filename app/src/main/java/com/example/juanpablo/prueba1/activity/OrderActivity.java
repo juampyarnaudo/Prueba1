@@ -190,9 +190,7 @@ public class OrderActivity extends AppCompatActivity {
 
     private void recordBuy(){
         mDatabase = FirebaseDatabase.getInstance();
-        String ref = User.getInstance().getUserId() + NewBuy.getInstance().getDate()
-                .replace(" ", ""). replace("/","")
-                .replace(":","");
+        String ref = User.getInstance().getUserId() + NewBuy.getInstance().getOrderDesc();
         myRef = mDatabase.getReference("buys/" + ref);
 
         decreaseSotck();

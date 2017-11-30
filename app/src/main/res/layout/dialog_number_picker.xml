@@ -18,11 +18,18 @@
         android:gravity="center_horizontal"
         android:orientation="vertical">
 
+        <ImageView
+            android:layout_width="80dp"
+            android:layout_height="80dp"
+            android:layout_marginTop="10dp"
+            android:background="@drawable/beer_icon"
+            android:id="@+id/ivPhoto"/>
+
         <TextView
             android:id="@+id/tvPrice"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="36dp"
+            android:layout_marginTop="8dp"
             android:text="$170"
             android:textSize="18sp"
             android:textStyle="bold" />
@@ -31,7 +38,7 @@
             android:id="@+id/tvTotal"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="43dp"
+            android:layout_marginTop="20dp"
             android:textColor="@color/colorAccent"
             android:textSize="24sp"
             android:textStyle="bold"

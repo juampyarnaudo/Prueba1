@@ -43,7 +43,7 @@ public class HistoryActivity extends AppCompatActivity {
     public void setBuy(final Context context) {
         User user = User.getInstance();
         final FirebaseDatabase database = FirebaseDatabase.getInstance();
-        Query query = database.getReference("buys").orderByChild("userId").equalTo(user.getUserId());
+        Query query = database.getReference("buys").orderByChild("userId").startAt(user.getUserId());
 
         query.addValueEventListener(new ValueEventListener() {
             @Override
@@ -55,6 +55,8 @@ public class HistoryActivity extends AppCompatActivity {
                 }
                 if(buys.size() > 0) {
                     ivEmptyList.setVisibility(View.GONE);
+                } else {
+                    ivEmptyList.setVisibility(View.VISIBLE);
                 }
                 historyListAdapter = new HistoryListAdapter(getBaseContext(), buys);
                 lvHistory.setAdapter(historyListAdapter);
