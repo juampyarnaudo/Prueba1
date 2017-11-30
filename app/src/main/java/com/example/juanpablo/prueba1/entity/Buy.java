@@ -12,6 +12,7 @@ public class Buy {
     protected String location = "";
     protected boolean delivery = false;
     protected boolean closed = false;
+    protected long orderDesc;
 
 
     public Buy() {
@@ -87,5 +88,13 @@ public class Buy {
 
     public void setClosed(boolean closed) {
         this.closed = closed;
+    }
+
+    public long getOrderDesc() {
+        return orderDesc;
+    }
+
+    public void setOrderDesc(long orderDesc) {
+        this.orderDesc = orderDesc;
     }
 }

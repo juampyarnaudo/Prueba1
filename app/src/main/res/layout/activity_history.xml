@@ -6,6 +6,12 @@
     android:layout_height="wrap_content"
     tools:context="com.example.juanpablo.prueba1.activity.HistoryActivity">
 
+    <ImageView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/ivEmptyList"
+        android:src="@drawable/empty_list"/>
+
     <ListView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"

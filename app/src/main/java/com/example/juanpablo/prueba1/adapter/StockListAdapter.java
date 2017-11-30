@@ -17,6 +17,11 @@ import com.example.juanpablo.prueba1.entity.Stock;
 import java.util.ArrayList;
 import java.util.List;
 
+import jp.wasabeef.glide.transformations.BlurTransformation;
+import jp.wasabeef.glide.transformations.RoundedCornersTransformation;
+
+import static com.bumptech.glide.request.RequestOptions.bitmapTransform;
+
 public class StockListAdapter extends ArrayAdapter<Stock> {
     private List<Stock> objects;
     private List<Stock> objectsFiltered;
@@ -55,6 +60,7 @@ public class StockListAdapter extends ArrayAdapter<Stock> {
 
         Glide.with(context)
                 .load(objectsFiltered.get(position).getImageUrl())
+                .apply(bitmapTransform(new RoundedCornersTransformation(30, 0, RoundedCornersTransformation.CornerType.ALL)))
                 .into(ivStock);
 
         return convertView;

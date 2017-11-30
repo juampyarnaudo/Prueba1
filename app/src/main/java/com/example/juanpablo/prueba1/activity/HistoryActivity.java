@@ -3,6 +3,8 @@ package com.example.juanpablo.prueba1.activity;
 import android.content.Context;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+import android.view.View;
+import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.Toast;
 
@@ -22,6 +24,7 @@ import java.util.List;
 public class HistoryActivity extends AppCompatActivity {
 
     private ListView lvHistory;
+    private ImageView ivEmptyList;
     private HistoryListAdapter historyListAdapter;
 
     private List<Buy> buys;
@@ -34,6 +37,7 @@ public class HistoryActivity extends AppCompatActivity {
         setBuy(this);
 
         lvHistory = (ListView) findViewById(R.id.lvHistory);
+        ivEmptyList = (ImageView) findViewById(R.id.ivEmptyList);
     }
 
     public void setBuy(final Context context) {
@@ -48,6 +52,9 @@ public class HistoryActivity extends AppCompatActivity {
                 for(DataSnapshot snapshot : dataSnapshot.getChildren()) {
                     Buy buy = snapshot.getValue(Buy.class);
                     buys.add(buy);
+                }
+                if(buys.size() > 0) {
+                    ivEmptyList.setVisibility(View.GONE);
                 }
                 historyListAdapter = new HistoryListAdapter(getBaseContext(), buys);
                 lvHistory.setAdapter(historyListAdapter);

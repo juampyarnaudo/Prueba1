@@ -19,6 +19,7 @@ public class NewBuy extends Buy {
             newBuy.setElements(new ArrayList<Element>());
             newBuy.setDate(DateUtil.buildDate());
             newBuy.setMonth(DateUtil.buildMonth());
+            newBuy.setOrderDesc(DateUtil.buildOrderDesc());
         }
         return newBuy;
     }

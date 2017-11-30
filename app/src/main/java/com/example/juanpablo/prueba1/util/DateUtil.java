@@ -22,4 +22,14 @@ public class DateUtil {
         calendar += Calendar.getInstance().get(Calendar.YEAR);
         return calendar;
     }
+
+    public static long buildOrderDesc() {
+        String calendar = "" + Calendar.getInstance().get(Calendar.YEAR);
+        calendar += Calendar.getInstance().get(Calendar.MONTH);
+        calendar += Calendar.getInstance().get(Calendar.DAY_OF_MONTH);
+        calendar += Calendar.getInstance().get(Calendar.HOUR);
+        calendar += Calendar.getInstance().get(Calendar.MINUTE);
+        calendar += Calendar.getInstance().get(Calendar.SECOND);
+        return Long.parseLong(calendar);
+    }
 }

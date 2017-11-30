@@ -47,6 +47,8 @@ public class StockActivity extends AppCompatActivity {
     private StockListAdapter stockListAdapter;
 
     private List<Stock> stocks;
+    private List<Integer> stocksChangedIndex = new ArrayList<>();
+    private List<Integer> stocksChangedValues = new ArrayList<>();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -123,6 +125,9 @@ public class StockActivity extends AppCompatActivity {
             case R.id.contact:
                 Intent intent3 = new Intent(this, ContactActivity.class);
                 startActivity(intent3);
+                break;
+            case R.id.exit:
+                finish();
                 break;
             case R.id.logout:
                 FirebaseAuth.getInstance().signOut();
@@ -214,7 +219,30 @@ public class StockActivity extends AppCompatActivity {
             fab.setVisibility(View.VISIBLE);
         } else {
             fab.setVisibility(View.INVISIBLE);
+            if(stocksChangedIndex.size() > 0) {
+                restoreModifiedStockElements();
+            }
         }
+    }
+
+    public void modifyStockElement(Stock stock, int newCount) {
+        int indexOf = stocks.indexOf(stock);
+        int oldCount = stocks.get(indexOf).getCount();
+        stocksChangedIndex.add(indexOf);
+        stocksChangedValues.add(oldCount);
+        stocks.get(indexOf).setCount(oldCount - newCount);
+        stockListAdapter.notifyDataSetChanged();
+    }
+
+    private void restoreModifiedStockElements() {
+        for(int i = 0; i < stocksChangedIndex.size(); i++) {
+            Integer index = stocksChangedIndex.get(i);
+            Integer count = stocksChangedValues.get(i);
+            stocks.get(index).setCount(count);
+        }
+        stocksChangedIndex = new ArrayList<>();
+        stocksChangedValues = new ArrayList<>();
+        stockListAdapter.notifyDataSetChanged();
     }
 
 }

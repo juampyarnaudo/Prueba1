@@ -56,6 +56,7 @@ public class NumberPickerDialog extends DialogFragment {
                     newBuy.setTotal(totalActual + stock.getPrice() * stockAmount);
                     StockActivity activity = (StockActivity) getActivity();
                     activity.enabledButton();
+                    activity.modifyStockElement(stock, stockAmount);
                     Toast.makeText(getContext(), "Se agregaron " + stockAmount + " " + stock.getName(), Toast.LENGTH_SHORT).show();
                 }
             }

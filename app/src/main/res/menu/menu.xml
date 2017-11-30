@@ -18,6 +18,9 @@
     <item android:id="@+id/contact"
         android:title="Contacto" />
 
+    <item android:id="@+id/exit"
+        android:title="Salir" />
+
     <item android:id="@+id/logout"
         android:title="Logout" />
 </menu>
