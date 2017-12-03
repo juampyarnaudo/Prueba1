@@ -172,18 +172,17 @@ public class StockActivity extends AppCompatActivity {
         final FirebaseDatabase database = FirebaseDatabase.getInstance();
         DatabaseReference ref = database.getReference("stock");
         stocks = new ArrayList<>();
+        stockListAdapter = new StockListAdapter(context, stocks);
+        lvStock.setAdapter(stockListAdapter);
 
-        ref.addValueEventListener(new ValueEventListener() {
+        ref.orderByChild("price").addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
-                stocks.clear();
                 for(DataSnapshot snapshot : dataSnapshot.getChildren()) {
                     Stock stock = snapshot.getValue(Stock.class);
-                    stocks.add(stock);
+                    addStock(stock);
                 }
-                stockListAdapter = new StockListAdapter(context, stocks);
 
-                lvStock.setAdapter(stockListAdapter);
                 lvStock.setTextFilterEnabled(true);
 
                 pbLoad.setVisibility(View.GONE);
@@ -245,4 +244,13 @@ public class StockActivity extends AppCompatActivity {
         stockListAdapter.notifyDataSetChanged();
     }
 
+    private void addStock(Stock stock) {
+        if (!stocks.contains(stock)) {
+            stocks.add(stock);
+            stockListAdapter.notifyDataSetChanged();
+        } else {
+            int indexOf = stocks.indexOf(stock);
+            stocks.get(indexOf).setCount(stock.getCount());
+        }
+    }
 }

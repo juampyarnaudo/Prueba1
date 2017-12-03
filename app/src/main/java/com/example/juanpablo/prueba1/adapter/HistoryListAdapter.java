@@ -5,11 +5,8 @@ import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Adapter;
 import android.widget.ArrayAdapter;
 import android.widget.LinearLayout;
-import android.widget.ListAdapter;
-import android.widget.ListView;
 import android.widget.TextView;
 
 import com.example.juanpablo.prueba1.R;
@@ -22,7 +19,9 @@ public class HistoryListAdapter extends ArrayAdapter<Buy> {
 
     private TextView tvDate;
     private TextView tvTotal;
-    private ListView lvInsideHistory;
+    private TextView tvDelivery;
+    private LinearLayout llElements;
+    private LinearLayout llHeader;
 
     private List<Buy> buys;
     private Context context;
@@ -43,16 +42,49 @@ public class HistoryListAdapter extends ArrayAdapter<Buy> {
 
         tvDate = convertView.findViewById(R.id.tvDate);
         tvTotal = convertView.findViewById(R.id.tvTotal);
-        lvInsideHistory = convertView.findViewById(R.id.lvInsideHistory);
+        tvDelivery = convertView.findViewById(R.id.tvDelivery);
+        llElements = convertView.findViewById(R.id.llElements);
+        llHeader = convertView.findViewById(R.id.llHeader);
+
+        if (buys.get(position).isClosed()){
+            llHeader.setBackgroundResource(R.color.colorPrimary);
+        }
+
+        if(buys.get(position).isDelivery()) {
+            tvDelivery.setText("Delivery");
+        } else {
+            tvDelivery.setText("Reserva");
+        }
 
         tvDate.setText(buys.get(position).getDate());
         tvTotal.setText("$" + buys.get(position).getTotal());
 
-        ListAdapter adapter = new HistoryInsideListAdapter(context, buys.get(position).getElements());
-        lvInsideHistory.setAdapter(adapter);
-
-        lvInsideHistory.setLayoutParams(new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT,80 * buys.get(position).getElements().size()));
+        setLlElements(llElements, buys.get(position).getElements());
 
         return convertView;
+    }
+
+    private void setLlElements(LinearLayout layout, List<Element> llElements) {
+        TextView tvStock;
+        TextView tvPrice;
+        TextView tvAmount;
+
+        layout.removeAllViews();
+
+        LayoutInflater inflater = (LayoutInflater) getContext()
+                .getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+
+        for(Element element : llElements) {
+            View view = inflater.inflate(R.layout.adapter_inside_history_list, null);
+            tvStock = view.findViewById(R.id.tvStock);
+            tvPrice = view.findViewById(R.id.tvPrice);
+            tvAmount = view.findViewById(R.id.tvAmount);
+
+            tvStock.setText(element.getStockId());
+            tvPrice.setText("$" + element.getPrice());
+            tvAmount.setText(Integer.toString(element.getAmount()));
+
+            layout.addView(view);
+        }
     }
 }

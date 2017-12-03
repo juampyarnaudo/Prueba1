@@ -11,17 +11,15 @@ import android.net.Uri;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
+import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.LinearLayout;
-import android.widget.ListView;
-import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.juanpablo.prueba1.R;
-import com.example.juanpablo.prueba1.adapter.HistoryInsideListAdapter;
 import com.example.juanpablo.prueba1.entity.Buy;
 import com.example.juanpablo.prueba1.entity.Element;
 import com.example.juanpablo.prueba1.entity.NewBuy;
@@ -43,7 +41,6 @@ public class OrderActivity extends AppCompatActivity {
     public static final String BUY_CODE = "BUY";
     public static final int NOTIFICATION_ID = 1;
 
-    private ListView lvElements;
     private TextView tvDate;
     private TextView tvTotal;
     private Button btnClear;
@@ -51,7 +48,7 @@ public class OrderActivity extends AppCompatActivity {
     private Button btnCancel;
     private RadioGroup radioGroup;
     private EditText etAdress;
-    private LinearLayout llLocal, llDelivery;
+    private LinearLayout llLocal, llDelivery, llElements;
 
     private FirebaseDatabase mDatabase;
     private DatabaseReference myRef;
@@ -63,7 +60,6 @@ public class OrderActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_order);
 
-        lvElements = (ListView) findViewById(R.id.lvElements);
         tvDate = (TextView) findViewById(R.id.tvDate);
         tvTotal = (TextView) findViewById(R.id.tvTotal);
         btnClear = (Button) findViewById(R.id.btnClear);
@@ -73,14 +69,14 @@ public class OrderActivity extends AppCompatActivity {
         etAdress = (EditText) findViewById(R.id.etAdress);
         llLocal = (LinearLayout) findViewById(R.id.llLocal);
         llDelivery = (LinearLayout) findViewById(R.id.llDelivery);
+        llElements = (LinearLayout) findViewById(R.id.llElements);
 
         List<Element> elements = NewBuy.getInstance().getElements();
 
         locationUtil = new LocationUtil(this);
         locationUtil.getLocation();
 
-        lvElements.setAdapter(new HistoryInsideListAdapter(this, elements));
-        lvElements.setLayoutParams(new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT,90 * elements.size()));
+        setLlElements(llElements, elements);
 
         tvDate.setText(NewBuy.getInstance().getDate());
         tvTotal.setText("Total a Pagar $" + NewBuy.getInstance().getTotal());
@@ -144,6 +140,8 @@ public class OrderActivity extends AppCompatActivity {
 
             }
         });
+
+        this.getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_HIDDEN);
     }
 
     private void finishAndResult(String action){
@@ -154,6 +152,7 @@ public class OrderActivity extends AppCompatActivity {
 
         if(!CLEAR_CODE.equals(action)){
             Intent intent = new Intent(this, CongratsActivity.class);
+            intent.putExtra("isDelivery", NewBuy.getInstance().isDelivery());
             startActivity(intent);
         }
         finish();
@@ -216,6 +215,25 @@ public class OrderActivity extends AppCompatActivity {
 
                 }
             });
+        }
+    }
+
+    private void setLlElements(LinearLayout layout, List<Element> llElements) {
+        TextView tvStock;
+        TextView tvPrice;
+        TextView tvAmount;
+
+        for(Element element : llElements) {
+            View view = getLayoutInflater().inflate(R.layout.adapter_inside_history_list, null);
+            tvStock = view.findViewById(R.id.tvStock);
+            tvPrice = view.findViewById(R.id.tvPrice);
+            tvAmount = view.findViewById(R.id.tvAmount);
+
+            tvStock.setText(element.getStockId());
+            tvPrice.setText("$" + element.getPrice());
+            tvAmount.setText(Integer.toString(element.getAmount()));
+
+            layout.addView(view);
         }
     }
 }

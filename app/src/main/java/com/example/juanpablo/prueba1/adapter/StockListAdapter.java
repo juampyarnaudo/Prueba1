@@ -8,6 +8,7 @@ import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.Filter;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
@@ -28,8 +29,10 @@ public class StockListAdapter extends ArrayAdapter<Stock> {
     private StockFilter filter;
     private TextView tvName;
     private TextView tvPrice;
+    private TextView tvHeader;
     private TextView tvCount;
     private ImageView ivStock;
+    private LinearLayout llHeader;
     private Context context;
 
     public StockListAdapter(Context context, List<Stock> objects) {
@@ -51,11 +54,14 @@ public class StockListAdapter extends ArrayAdapter<Stock> {
         tvName = (TextView) convertView.findViewById(R.id.tvName);
         tvPrice = (TextView) convertView.findViewById(R.id.tvPrice);
         tvCount = (TextView) convertView.findViewById(R.id.tvCount);
+        tvHeader = (TextView) convertView.findViewById(R.id.tvHeader);
         ivStock = (ImageView) convertView.findViewById(R.id.ivStock);
+        llHeader = (LinearLayout) convertView.findViewById(R.id.llHeader);
 
         tvName.setText(objectsFiltered.get(position).getName());
         tvPrice.setText("$" + objectsFiltered.get(position).getPrice());
         tvCount.setText(Integer.toString(objectsFiltered.get(position).getCount()));
+        tvHeader.setText("$" + objectsFiltered.get(position).getPrice());
         ivStock.setImageResource(R.drawable.perfil);
 
         Glide.with(context)
@@ -63,7 +69,15 @@ public class StockListAdapter extends ArrayAdapter<Stock> {
                 .apply(bitmapTransform(new RoundedCornersTransformation(30, 0, RoundedCornersTransformation.CornerType.ALL)))
                 .into(ivStock);
 
-        return convertView;
+        if(position > 0) {
+            if(objectsFiltered.get(position - 1).getPrice() == objectsFiltered.get(position).getPrice()) {
+                llHeader.setVisibility(View.GONE);
+            } else {
+                llHeader.setVisibility(View.VISIBLE);
+            }
+        }
+
+            return convertView;
     }
 
     @Override

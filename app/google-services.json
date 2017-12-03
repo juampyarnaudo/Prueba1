@@ -1,27 +1,27 @@
 {
   "project_info": {
-    "project_number": "658351255031",
-    "firebase_url": "https://softnow-97a6e.firebaseio.com",
-    "project_id": "softnow-97a6e",
-    "storage_bucket": "softnow-97a6e.appspot.com"
+    "project_number": "652554925891",
+    "firebase_url": "https://cheers-brothers.firebaseio.com",
+    "project_id": "cheers-brothers",
+    "storage_bucket": "cheers-brothers.appspot.com"
   },
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:658351255031:android:c2caebf88aa90733",
+        "mobilesdk_app_id": "1:652554925891:android:c2caebf88aa90733",
         "android_client_info": {
           "package_name": "com.example.juanpablo.prueba1"
         }
       },
       "oauth_client": [
         {
-          "client_id": "658351255031-vrmalbd5d04l96mp5ir8qc8iifpggcn4.apps.googleusercontent.com",
+          "client_id": "652554925891-t2q6m1hs1lsqjtuq40vclr4867qubh3r.apps.googleusercontent.com",
           "client_type": 3
         }
       ],
       "api_key": [
         {
-          "current_key": "AIzaSyCoSx2n2q-H_eL48Gk1uTMQWYPUDlxw7WY"
+          "current_key": "AIzaSyBtPeZNOvBIMINfcbXv5Kfq_sono1AIQKQ"
         }
       ],
       "services": {

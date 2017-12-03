@@ -5,6 +5,7 @@ import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.Toast;
 
@@ -19,6 +20,7 @@ import com.google.firebase.database.Query;
 import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 public class HistoryActivity extends AppCompatActivity {
@@ -26,6 +28,7 @@ public class HistoryActivity extends AppCompatActivity {
     private ListView lvHistory;
     private ImageView ivEmptyList;
     private HistoryListAdapter historyListAdapter;
+    private LinearLayout llIndicators;
 
     private List<Buy> buys;
 
@@ -38,12 +41,13 @@ public class HistoryActivity extends AppCompatActivity {
 
         lvHistory = (ListView) findViewById(R.id.lvHistory);
         ivEmptyList = (ImageView) findViewById(R.id.ivEmptyList);
+        llIndicators = (LinearLayout) findViewById(R.id.llIndicators);
     }
 
     public void setBuy(final Context context) {
         User user = User.getInstance();
         final FirebaseDatabase database = FirebaseDatabase.getInstance();
-        Query query = database.getReference("buys").orderByChild("userId").startAt(user.getUserId());
+        Query query = database.getReference("buys").orderByChild("userId").equalTo(user.getUserId());
 
         query.addValueEventListener(new ValueEventListener() {
             @Override
@@ -55,9 +59,12 @@ public class HistoryActivity extends AppCompatActivity {
                 }
                 if(buys.size() > 0) {
                     ivEmptyList.setVisibility(View.GONE);
+                    llIndicators.setVisibility(View.VISIBLE);
                 } else {
                     ivEmptyList.setVisibility(View.VISIBLE);
+                    llIndicators.setVisibility(View.GONE);
                 }
+                Collections.reverse(buys);
                 historyListAdapter = new HistoryListAdapter(getBaseContext(), buys);
                 lvHistory.setAdapter(historyListAdapter);
             }

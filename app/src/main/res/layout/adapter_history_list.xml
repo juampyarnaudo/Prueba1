@@ -17,23 +17,40 @@
         android:background="#fff"
         android:orientation="vertical">
 
-        <TextView
+        <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Fecha"
-            android:textStyle="bold"
-            android:textSize="18sp"
-            android:textColor="#fff"
+            android:orientation="horizontal"
             android:padding="8dp"
             android:background="@color/colorAccent"
-            android:layout_marginBottom="8dp"
-            android:id="@+id/tvDate" />
+            android:id="@+id/llHeader">
 
-        <ListView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:divider="#00ffffff"
-            android:id="@+id/lvInsideHistory"/>
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Fecha"
+                android:textStyle="bold"
+                android:textSize="18sp"
+                android:textColor="#fff"
+                android:layout_weight="1"
+                android:id="@+id/tvDate" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="(Delivery)"
+                android:textColor="#fff"
+                android:id="@+id/tvDelivery"/>
+
+        </LinearLayout>
+
+
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:orientation="vertical"
+            android:id="@+id/llElements"/>
 
         <TextView
             android:layout_width="match_parent"

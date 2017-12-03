@@ -56,4 +56,12 @@ public class Stock {
     public void setImageUrl(String imageUrl) {
         this.imageUrl = imageUrl;
     }
+
+    @Override
+    public boolean equals(Object obj) {
+        Stock stock = (Stock) obj;
+
+        return this.name.equals(stock.getName());
+
+    }
 }

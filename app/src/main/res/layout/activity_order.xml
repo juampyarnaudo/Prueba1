@@ -30,10 +30,11 @@
                 android:layout_marginBottom="8dp"
                 android:text="Fecha"/>
 
-            <ListView
-                android:layout_width="match_parent"
+            <LinearLayout
+                android:layout_width="wrap_content"
                 android:layout_height="match_parent"
-                android:id="@+id/lvElements"/>
+                android:orientation="vertical"
+                android:id="@+id/llElements"/>
 
             <TextView
                 android:layout_width="wrap_content"
@@ -74,15 +75,16 @@
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
                     android:checked="true"
-                    android:id="@+id/rbLocal"
-                    android:text="Retiro en Local"/>
+                    android:id="@+id/rbDelivery"
+                    android:text="Entrega a Domicilio"/>
 
                 <RadioButton
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
-                    android:id="@+id/rbDelivery"
-                    android:text="Entrega a Domicilio"/>
+                    android:id="@+id/rbLocal"
+                    android:text="Retiro en Local"/>
+
             </RadioGroup>
 
             <LinearLayout
@@ -90,11 +92,12 @@
                 android:layout_height="wrap_content"
                 android:id="@+id/llLocal"
                 android:orientation="vertical"
-                android:visibility="visible">
+                android:visibility="gone">
 
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:layout_marginTop="6dp"
                     android:textSize="18dp"
                     android:text="Las reservas se cancelan a los 5 dias de no retirarlas"/>
 
@@ -105,13 +108,19 @@
                 android:layout_height="wrap_content"
                 android:id="@+id/llDelivery"
                 android:orientation="vertical"
-                android:visibility="gone">
+                android:visibility="visible">
 
                 <EditText
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:id="@+id/etAdress"
                     android:hint="Direccion"/>
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="6dp"
+                    android:textSize="18dp"
+                    android:text="El servicio de delivery tiene un costo acorde a la zona. Te contactaremos por SMS"/>
 
             </LinearLayout>
 
