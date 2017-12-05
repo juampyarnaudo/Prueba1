@@ -46,7 +46,7 @@ public class HistoryListAdapter extends ArrayAdapter<Buy> {
         llElements = convertView.findViewById(R.id.llElements);
         llHeader = convertView.findViewById(R.id.llHeader);
 
-        if (buys.get(position).isClosed()){
+        if (!Buy.PENDING.equals(buys.get(position).getStatus())){
             llHeader.setBackgroundResource(R.color.colorPrimary);
         }
 

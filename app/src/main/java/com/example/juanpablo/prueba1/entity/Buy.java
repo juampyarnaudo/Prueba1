@@ -3,6 +3,9 @@ package com.example.juanpablo.prueba1.entity;
 import java.util.List;
 
 public class Buy {
+
+    public static final String PENDING = "PENDING";
+
     protected String date;
     protected List<Element> elements;
     protected double total;
@@ -11,7 +14,7 @@ public class Buy {
     protected String address = "";
     protected String location = "";
     protected boolean delivery = false;
-    protected boolean closed = false;
+    protected String status = PENDING;
     protected long orderDesc;
 
 
@@ -82,12 +85,12 @@ public class Buy {
         this.delivery = delivery;
     }
 
-    public boolean isClosed() {
-        return closed;
+    public String getStatus() {
+        return status;
     }
 
-    public void setClosed(boolean closed) {
-        this.closed = closed;
+    public void setStatus(String status) {
+        this.status = status;
     }
 
     public long getOrderDesc() {

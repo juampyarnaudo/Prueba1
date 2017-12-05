@@ -18,6 +18,10 @@
     <item android:id="@+id/contact"
         android:title="Contacto" />
 
+    <item android:id="@+id/email"
+        android:icon="@android:drawable/ic_menu_send"
+        android:title="Sugerencias"/>
+
     <item android:id="@+id/exit"
         android:title="Salir" />
 

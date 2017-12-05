@@ -3,6 +3,7 @@ package com.example.juanpablo.prueba1.activity;
 import android.app.SearchManager;
 import android.content.Context;
 import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
@@ -129,6 +130,9 @@ public class StockActivity extends AppCompatActivity {
             case R.id.exit:
                 finish();
                 break;
+            case R.id.email:
+                sendEmail();
+                break;
             case R.id.logout:
                 FirebaseAuth.getInstance().signOut();
                 Intent intent4 = new Intent(this, MainActivity.class);
@@ -175,7 +179,7 @@ public class StockActivity extends AppCompatActivity {
         stockListAdapter = new StockListAdapter(context, stocks);
         lvStock.setAdapter(stockListAdapter);
 
-        ref.orderByChild("price").addValueEventListener(new ValueEventListener() {
+        ref.orderByChild("category").addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
                 for(DataSnapshot snapshot : dataSnapshot.getChildren()) {
@@ -251,6 +255,25 @@ public class StockActivity extends AppCompatActivity {
         } else {
             int indexOf = stocks.indexOf(stock);
             stocks.get(indexOf).setCount(stock.getCount());
+        }
+    }
+
+    protected void sendEmail() {
+        String[] TO = {"cheersbrotherbebidas@gmail.com"};
+        String[] CC = {""};
+        Intent emailIntent = new Intent(Intent.ACTION_SEND);
+        emailIntent.setData(Uri.parse("mailto:"));
+        emailIntent.setType("text/plain");
+        emailIntent.putExtra(Intent.EXTRA_EMAIL, TO);
+        emailIntent.putExtra(Intent.EXTRA_CC, CC);
+        emailIntent.putExtra(Intent.EXTRA_SUBJECT, "Quiero hacer una sugerencia");
+        emailIntent.putExtra(Intent.EXTRA_TEXT, "");
+
+        try {
+            startActivity(Intent.createChooser(emailIntent, "Enviar email..."));
+        } catch (android.content.ActivityNotFoundException ex) {
+            Toast.makeText(this,
+                    "No tienes clientes de email instalados.", Toast.LENGTH_SHORT).show();
         }
     }
 }

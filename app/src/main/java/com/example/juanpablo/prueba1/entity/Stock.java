@@ -7,6 +7,7 @@ public class Stock {
     private int count;
     private String image;
     private String imageUrl;
+    private String category;
 
     public Stock() {
     }
@@ -55,6 +56,14 @@ public class Stock {
 
     public void setImageUrl(String imageUrl) {
         this.imageUrl = imageUrl;
+    }
+
+    public String getCategory() {
+        return category;
+    }
+
+    public void setCategory(String category) {
+        this.category = category;
     }
 
     @Override

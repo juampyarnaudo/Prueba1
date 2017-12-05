@@ -12,6 +12,7 @@
         android:layout_marginRight="6dp"
         android:gravity="center_vertical"
         android:padding="4dp"
+        android:clickable="false"
         android:visibility="visible"
         android:layout_marginBottom="4dp"
         android:background="@drawable/layout_border_header"
@@ -23,8 +24,7 @@
             android:layout_height="wrap_content"
             android:text="Fernet 1lt"
             android:textColor="#fff"
-            android:textSize="20dp"
-            android:textStyle="bold" />
+            android:textSize="20dp" />
 
     </LinearLayout>
 
@@ -61,19 +61,19 @@
                 android:text="Fernet 1lt" />
 
             <TextView
-                android:id="@+id/tvPrice"
+                android:id="@+id/tvCount"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:textSize="20dp"
-                android:text="$145" />
+                android:textSize="15dp"
+                android:text="Unidades: 17" />
         </LinearLayout>
 
         <TextView
-            android:id="@+id/tvCount"
+            android:id="@+id/tvPrice"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:textSize="20dp"
-            android:text="17" />
+            android:text="$145" />
 
     </LinearLayout>
 

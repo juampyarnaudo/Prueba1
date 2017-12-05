@@ -60,8 +60,8 @@ public class StockListAdapter extends ArrayAdapter<Stock> {
 
         tvName.setText(objectsFiltered.get(position).getName());
         tvPrice.setText("$" + objectsFiltered.get(position).getPrice());
-        tvCount.setText(Integer.toString(objectsFiltered.get(position).getCount()));
-        tvHeader.setText("$" + objectsFiltered.get(position).getPrice());
+        tvCount.setText("Unidades: " + objectsFiltered.get(position).getCount());
+        tvHeader.setText(objectsFiltered.get(position).getCategory());
         ivStock.setImageResource(R.drawable.perfil);
 
         Glide.with(context)
@@ -70,11 +70,13 @@ public class StockListAdapter extends ArrayAdapter<Stock> {
                 .into(ivStock);
 
         if(position > 0) {
-            if(objectsFiltered.get(position - 1).getPrice() == objectsFiltered.get(position).getPrice()) {
+            if(objectsFiltered.get(position - 1).getCategory().equals(objectsFiltered.get(position).getCategory())) {
                 llHeader.setVisibility(View.GONE);
             } else {
                 llHeader.setVisibility(View.VISIBLE);
             }
+        } else {
+            llHeader.setVisibility(View.VISIBLE);
         }
 
             return convertView;

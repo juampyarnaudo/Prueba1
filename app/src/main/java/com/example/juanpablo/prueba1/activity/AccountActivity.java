@@ -112,7 +112,7 @@ public class AccountActivity extends AppCompatActivity {
                 final Uri imageUri = data.getData();
                 final InputStream imageStream = getContentResolver().openInputStream(imageUri);
                 final Bitmap selectedImage = BitmapFactory.decodeStream(imageStream);
-                ivPhoto.setImageBitmap(selectedImage);
+                ivPhoto.setImageBitmap(cropBitmap(selectedImage));
             } catch (FileNotFoundException e) {
                 e.printStackTrace();
                 Toast.makeText(this, "Algo malo paso", Toast.LENGTH_LONG).show();
@@ -203,6 +203,31 @@ public class AccountActivity extends AppCompatActivity {
             return true;
         }
         return false;
+    }
+
+    private Bitmap cropBitmap(Bitmap srcBmp){
+        Bitmap dstBmp;
+        if (srcBmp.getWidth() >= srcBmp.getHeight()){
+
+            dstBmp = Bitmap.createBitmap(
+                    srcBmp,
+                    srcBmp.getWidth()/2 - srcBmp.getHeight()/2,
+                    0,
+                    srcBmp.getHeight(),
+                    srcBmp.getHeight()
+            );
+
+        }else{
+
+            dstBmp = Bitmap.createBitmap(
+                    srcBmp,
+                    0,
+                    srcBmp.getHeight()/2 - srcBmp.getWidth()/2,
+                    srcBmp.getWidth(),
+                    srcBmp.getWidth()
+            );
+        }
+        return dstBmp;
     }
 }
 
